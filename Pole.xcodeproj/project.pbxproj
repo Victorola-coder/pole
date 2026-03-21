@@ -15,6 +15,7 @@
 		4C813EE6E616BA82996EE6FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC05156DB8C1D5C7AEAC5565 /* AppState.swift */; };
 		51D106C3CF98EDB0298A20A5 /* PermissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F53C5A25D68303712BDE9 /* PermissionService.swift */; };
 		76FFA07ED65E43C8DCB7D9C2 /* MockStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06914BB3990184C4532AB80B /* MockStorageScanner.swift */; };
+		8B87179EAAED9C2962F5EF51 /* CleanupCandidatePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */; };
 		988134C2EDFA5E50316529F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3716EF9626CB62AAB9366213 /* SettingsView.swift */; };
 		9FFCA39145BCDE6700165572 /* ScopedFolderStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DFE317AEF6607511BAD290 /* ScopedFolderStore.swift */; };
 		A7C4A3601A0ABC1CBF374BC4 /* CompositeStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D38982AC5A5855A82CCEC2 /* CompositeStorageScanner.swift */; };
@@ -29,6 +30,7 @@
 		1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryScanner.swift; sourceTree = "<group>"; };
 		25E673B59D3C2372AF2A1780 /* CleanupCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidate.swift; sourceTree = "<group>"; };
 		3716EF9626CB62AAB9366213 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidatePreview.swift; sourceTree = "<group>"; };
 		41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoleiOSApp.swift; sourceTree = "<group>"; };
 		4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		4E87A905B7C496F78C586CD9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 		608E04F7CA3D0656B0EAEE16 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */,
 				4E87A905B7C496F78C586CD9 /* DashboardView.swift */,
 			);
 			path = Dashboard;
@@ -211,6 +214,7 @@
 			files = (
 				4C813EE6E616BA82996EE6FC /* AppState.swift in Sources */,
 				B700DE8285A39F3D5082872C /* CleanupCandidate.swift in Sources */,
+				8B87179EAAED9C2962F5EF51 /* CleanupCandidatePreview.swift in Sources */,
 				1C2CFF1C3C3B11E6F12D0B74 /* CleanupService.swift in Sources */,
 				A7C4A3601A0ABC1CBF374BC4 /* CompositeStorageScanner.swift in Sources */,
 				1B4BE97544B693BAF771B14A /* DashboardView.swift in Sources */,

@@ -1,5 +1,6 @@
 import Foundation
 import Photos
+import UIKit
 
 struct PhotoLibraryScanner {
     func scanInsights() async -> [StorageInsight] {
@@ -62,14 +63,52 @@ struct PhotoLibraryScanner {
     }
 
     private func estimatedSizeBytes(for asset: PHAsset) -> Int64? {
+        switch asset.mediaType {
+        case .image:
+            return imageSizeBytes(for: asset)
+        case .video:
+            return videoSizeBytes(for: asset)
+        default:
+            return nil
+        }
+    }
+
+    private func imageSizeBytes(for asset: PHAsset) -> Int64? {
+        let options = PHImageRequestOptions()
+        options.isSynchronous = true
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+
+        var byteCount: Int64?
+        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { data, _, _, _ in
+            if let data {
+                byteCount = Int64(data.count)
+            }
+        }
+        return byteCount
+    }
+
+    private func videoSizeBytes(for asset: PHAsset) -> Int64? {
         let resources = PHAssetResource.assetResources(for: asset)
-        guard let resource = resources.first else {
+        guard let resource = resources.first(where: { $0.type == .video || $0.type == .fullSizeVideo }) else {
             return nil
         }
 
-        // Apple does not expose a direct public file-size API for PHAsset.
-        // This key is commonly used in production for estimation purposes.
-        return (resource.value(forKey: "fileSize") as? NSNumber)?.int64Value
+        var totalBytes: Int64 = 0
+        let semaphore = DispatchSemaphore(value: 0)
+        PHAssetResourceManager.default().requestData(
+            for: resource,
+            options: nil,
+            dataReceivedHandler: { data in
+                totalBytes += Int64(data.count)
+            },
+            completionHandler: { _ in
+                semaphore.signal()
+            }
+        )
+        semaphore.wait()
+
+        return totalBytes > 0 ? totalBytes : nil
     }
 
     private func bytesToGigabytes(_ bytes: Int64) -> Double {

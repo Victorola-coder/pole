@@ -77,6 +77,11 @@ struct DashboardView: View {
             .sheet(item: $pendingDeleteCandidate) { item in
                 NavigationStack {
                     List {
+                        Section("Preview") {
+                            CleanupCandidatePreview(candidate: item)
+                                .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                        }
+
                         Section("Item") {
                             HStack(spacing: 12) {
                                 Image(systemName: item.sourceSymbolName)
