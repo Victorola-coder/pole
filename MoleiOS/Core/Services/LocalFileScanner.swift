@@ -11,10 +11,11 @@ struct LocalFileScanner {
         .compactMap { $0 } + additionalDirectories
     }
 
-    func scanInsights() async -> [StorageInsight] {
-        let bytes = await Task.detached(priority: .utility) {
-            directories.reduce(Int64(0)) { partialResult, directory in
-                partialResult + recursiveDirectoryBytes(at: directory)
+    func scanInsights() async throws -> [StorageInsight] {
+        let bytes = try await Task.detached(priority: .utility) {
+            try directories.reduce(Int64(0)) { partialResult, directory in
+                try Task.checkCancellation()
+                return partialResult + (try recursiveDirectoryBytes(at: directory))
             }
         }.value
 
@@ -27,11 +28,12 @@ struct LocalFileScanner {
         ]
     }
 
-    func scanCandidates(limit: Int = 50) async -> [CleanupCandidate] {
-        let candidates: [CleanupCandidate] = await Task.detached(priority: .utility) {
+    func scanCandidates(limit: Int = 50) async throws -> [CleanupCandidate] {
+        let candidates: [CleanupCandidate] = try await Task.detached(priority: .utility) {
             var collected: [CleanupCandidate] = []
             for directory in directories {
-                collected.append(contentsOf: fileCandidates(in: directory))
+                try Task.checkCancellation()
+                collected.append(contentsOf: try fileCandidates(in: directory))
             }
             return collected
         }.value
@@ -42,10 +44,11 @@ struct LocalFileScanner {
             .map { $0 }
     }
 
-    func scanFolderAnalysis(maxDepth: Int = 2, maxChildrenPerNode: Int = 8) async -> [FolderAnalysisNode] {
-        await Task.detached(priority: .utility) {
-            directories.map { root in
-                buildFolderNode(
+    func scanFolderAnalysis(maxDepth: Int = 2, maxChildrenPerNode: Int = 8) async throws -> [FolderAnalysisNode] {
+        try await Task.detached(priority: .utility) {
+            try directories.map { root in
+                try Task.checkCancellation()
+                return try buildFolderNode(
                     at: root,
                     currentDepth: 0,
                     maxDepth: maxDepth,
@@ -55,14 +58,19 @@ struct LocalFileScanner {
         }.value
     }
 
-    private func recursiveDirectoryBytes(at root: URL) -> Int64 {
+    private func recursiveDirectoryBytes(at root: URL) throws -> Int64 {
         let keys: Set<URLResourceKey> = [.isRegularFileKey, .fileSizeKey, .creationDateKey]
         guard let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: Array(keys)) else {
             return 0
         }
 
         var bytes: Int64 = 0
+        var processedCount = 0
         for case let url as URL in enumerator {
+            processedCount += 1
+            if processedCount.isMultiple(of: 200) {
+                try Task.checkCancellation()
+            }
             guard let values = try? url.resourceValues(forKeys: keys),
                   values.isRegularFile == true,
                   let size = values.fileSize
@@ -74,7 +82,7 @@ struct LocalFileScanner {
         return bytes
     }
 
-    private func fileCandidates(in root: URL) -> [CleanupCandidate] {
+    private func fileCandidates(in root: URL) throws -> [CleanupCandidate] {
         let keys: Set<URLResourceKey> = [.isRegularFileKey, .fileSizeKey]
         guard let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: Array(keys)) else {
             return []
@@ -82,7 +90,12 @@ struct LocalFileScanner {
 
         var items: [CleanupCandidate] = []
         let minimumBytes = Int64(AppPreferences.minimumCandidateSizeMB * 1_024 * 1_024)
+        var processedCount = 0
         for case let url as URL in enumerator {
+            processedCount += 1
+            if processedCount.isMultiple(of: 200) {
+                try Task.checkCancellation()
+            }
             guard let values = try? url.resourceValues(forKeys: keys),
                   values.isRegularFile == true,
                   let size = values.fileSize,
@@ -111,12 +124,13 @@ struct LocalFileScanner {
         currentDepth: Int,
         maxDepth: Int,
         maxChildrenPerNode: Int
-    ) -> FolderAnalysisNode {
+    ) throws -> FolderAnalysisNode {
+        try Task.checkCancellation()
         var children: [FolderAnalysisNode] = []
         if currentDepth < maxDepth {
             let childDirectories = immediateSubdirectories(of: url)
-            children = childDirectories.map {
-                buildFolderNode(
+            children = try childDirectories.map {
+                try buildFolderNode(
                     at: $0,
                     currentDepth: currentDepth + 1,
                     maxDepth: maxDepth,
@@ -128,7 +142,7 @@ struct LocalFileScanner {
             .map { $0 }
         }
 
-        let ownBytes = recursiveDirectoryBytes(at: url)
+        let ownBytes = try recursiveDirectoryBytes(at: url)
         return FolderAnalysisNode(
             name: url.lastPathComponent,
             path: url.path,

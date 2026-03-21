@@ -3,7 +3,7 @@ import Photos
 import UIKit
 
 struct PhotoLibraryScanner {
-    func scanInsights() async -> [StorageInsight] {
+    func scanInsights() async throws -> [StorageInsight] {
         let imageAssets = PHAsset.fetchAssets(with: .image, options: nil)
         let videoAssets: PHFetchResult<PHAsset>
         if AppPreferences.includeVideosInScan {
@@ -14,8 +14,8 @@ struct PhotoLibraryScanner {
             videoAssets = PHAsset.fetchAssets(with: options)
         }
 
-        let imageBytes = totalBytes(for: imageAssets)
-        let videoBytes = totalBytes(for: videoAssets)
+        let imageBytes = try totalBytes(for: imageAssets)
+        let videoBytes = try totalBytes(for: videoAssets)
 
         return [
             StorageInsight(
@@ -31,19 +31,25 @@ struct PhotoLibraryScanner {
         ]
     }
 
-    func scanCandidates(limit: Int = 50) async -> [CleanupCandidate] {
+    func scanCandidates(limit: Int = 50) async throws -> [CleanupCandidate] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         let assets = PHAsset.fetchAssets(with: options)
 
         var allCandidates: [CleanupCandidate] = []
-        assets.enumerateObjects { asset, _, _ in
+        var wasCancelled = false
+        assets.enumerateObjects { asset, _, stop in
+            if Task.isCancelled {
+                wasCancelled = true
+                stop.pointee = true
+                return
+            }
             if asset.mediaType == .video && !AppPreferences.includeVideosInScan {
                 return
             }
 
             let minimumBytes = Int64(AppPreferences.minimumCandidateSizeMB * 1_024 * 1_024)
-            guard let bytes = estimatedSizeBytes(for: asset), bytes > minimumBytes else {
+            guard let bytes = try? estimatedSizeBytes(for: asset), bytes > minimumBytes else {
                 return
             }
 
@@ -59,6 +65,9 @@ struct PhotoLibraryScanner {
                 )
             )
         }
+        if wasCancelled || Task.isCancelled {
+            throw CancellationError()
+        }
 
         return allCandidates
             .sorted { $0.sizeBytes > $1.sizeBytes }
@@ -66,26 +75,37 @@ struct PhotoLibraryScanner {
             .map { $0 }
     }
 
-    private func totalBytes(for assets: PHFetchResult<PHAsset>) -> Int64 {
+    private func totalBytes(for assets: PHFetchResult<PHAsset>) throws -> Int64 {
         var total: Int64 = 0
-        assets.enumerateObjects { asset, _, _ in
-            total += estimatedSizeBytes(for: asset) ?? 0
+        var wasCancelled = false
+        assets.enumerateObjects { asset, _, stop in
+            if Task.isCancelled {
+                wasCancelled = true
+                stop.pointee = true
+                return
+            }
+            total += (try? estimatedSizeBytes(for: asset)) ?? 0
+        }
+        if wasCancelled || Task.isCancelled {
+            throw CancellationError()
         }
         return total
     }
 
-    private func estimatedSizeBytes(for asset: PHAsset) -> Int64? {
+    private func estimatedSizeBytes(for asset: PHAsset) throws -> Int64? {
+        try Task.checkCancellation()
         switch asset.mediaType {
         case .image:
-            return imageSizeBytes(for: asset)
+            return try imageSizeBytes(for: asset)
         case .video:
-            return videoSizeBytes(for: asset)
+            return try videoSizeBytes(for: asset)
         default:
             return nil
         }
     }
 
-    private func imageSizeBytes(for asset: PHAsset) -> Int64? {
+    private func imageSizeBytes(for asset: PHAsset) throws -> Int64? {
+        try Task.checkCancellation()
         let options = PHImageRequestOptions()
         options.isSynchronous = true
         options.isNetworkAccessAllowed = true
@@ -100,7 +120,8 @@ struct PhotoLibraryScanner {
         return byteCount
     }
 
-    private func videoSizeBytes(for asset: PHAsset) -> Int64? {
+    private func videoSizeBytes(for asset: PHAsset) throws -> Int64? {
+        try Task.checkCancellation()
         let resources = PHAssetResource.assetResources(for: asset)
         guard let resource = resources.first(where: { $0.type == .video || $0.type == .fullSizeVideo }) else {
             return nil
@@ -119,6 +140,7 @@ struct PhotoLibraryScanner {
             }
         )
         semaphore.wait()
+        try Task.checkCancellation()
 
         return totalBytes > 0 ? totalBytes : nil
     }

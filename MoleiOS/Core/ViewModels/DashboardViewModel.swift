@@ -98,6 +98,7 @@ final class DashboardViewModel: ObservableObject {
     }
 
     func cancelScan() {
+        scanStatusText = "Cancelling..."
         currentScanTask?.cancel()
     }
 

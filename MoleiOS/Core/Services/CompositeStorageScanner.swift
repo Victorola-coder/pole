@@ -12,23 +12,27 @@ struct CompositeStorageScanner: StorageScanning {
     func scan() async throws -> [StorageInsight] {
         var insights: [StorageInsight] = []
         let localFileScanner = LocalFileScanner(additionalDirectories: folderStore.scopedFolders())
+        try Task.checkCancellation()
 
         if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized
             || PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
-            insights.append(contentsOf: await photoScanner.scanInsights())
+            insights.append(contentsOf: try await photoScanner.scanInsights())
         }
 
-        insights.append(contentsOf: await localFileScanner.scanInsights())
+        try Task.checkCancellation()
+        insights.append(contentsOf: try await localFileScanner.scanInsights())
         return insights
     }
 
     func scanCandidates() async throws -> [CleanupCandidate] {
         let localFileScanner = LocalFileScanner(additionalDirectories: folderStore.scopedFolders())
-        var candidates: [CleanupCandidate] = await localFileScanner.scanCandidates()
+        try Task.checkCancellation()
+        var candidates: [CleanupCandidate] = try await localFileScanner.scanCandidates()
 
         if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized
             || PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
-            candidates.append(contentsOf: await photoScanner.scanCandidates())
+            try Task.checkCancellation()
+            candidates.append(contentsOf: try await photoScanner.scanCandidates())
         }
 
         return candidates.sorted { $0.sizeBytes > $1.sizeBytes }
@@ -36,6 +40,7 @@ struct CompositeStorageScanner: StorageScanning {
 
     func scanFolderAnalysis() async throws -> [FolderAnalysisNode] {
         let localFileScanner = LocalFileScanner(additionalDirectories: folderStore.scopedFolders())
-        return await localFileScanner.scanFolderAnalysis()
+        try Task.checkCancellation()
+        return try await localFileScanner.scanFolderAnalysis()
     }
 }
