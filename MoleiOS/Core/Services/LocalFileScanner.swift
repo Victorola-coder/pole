@@ -38,7 +38,7 @@ struct LocalFileScanner {
     }
 
     private func recursiveDirectoryBytes(at root: URL) -> Int64 {
-        let keys: Set<URLResourceKey> = [.isRegularFileKey, .fileSizeKey]
+        let keys: Set<URLResourceKey> = [.isRegularFileKey, .fileSizeKey, .creationDateKey]
         guard let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: Array(keys)) else {
             return 0
         }
@@ -77,6 +77,8 @@ struct LocalFileScanner {
                     source: .files,
                     displayName: url.lastPathComponent,
                     sizeBytes: Int64(size),
+                    createdAt: values.creationDate,
+                    detailText: root.path,
                     photoAssetLocalIdentifier: nil,
                     fileURL: url
                 )

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @StateObject private var viewModel: DashboardViewModel
+    @State private var pendingDeleteCandidate: CleanupCandidate?
 
     init(viewModel: DashboardViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -62,9 +63,7 @@ struct DashboardView: View {
                                         Text(String(format: "%.2f GB", item.sizeGigabytes))
                                             .font(.footnote)
                                         Button("Delete", role: .destructive) {
-                                            Task {
-                                                await viewModel.delete(candidate: item)
-                                            }
+                                            pendingDeleteCandidate = item
                                         }
                                         .buttonStyle(.borderless)
                                     }
@@ -75,6 +74,58 @@ struct DashboardView: View {
                 }
             }
             .navigationTitle("Pole")
+            .sheet(item: $pendingDeleteCandidate) { item in
+                NavigationStack {
+                    List {
+                        Section("Item") {
+                            HStack(spacing: 12) {
+                                Image(systemName: item.sourceSymbolName)
+                                    .font(.title3)
+                                    .frame(width: 30)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(item.displayName)
+                                        .font(.headline)
+                                    Text(item.source.rawValue.capitalized)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+
+                        Section("Metadata") {
+                            statRow(title: "Size", value: String(format: "%.2f GB", item.sizeGigabytes))
+                            if let createdAt = item.createdAt {
+                                statRow(title: "Created", value: createdAt.formatted(date: .abbreviated, time: .shortened))
+                            }
+                            if let detailText = item.detailText {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text("Details")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text(detailText)
+                                        .font(.footnote)
+                                }
+                            }
+                        }
+
+                        Section {
+                            Button("Delete This Item", role: .destructive) {
+                                Task {
+                                    await viewModel.delete(candidate: item)
+                                }
+                                pendingDeleteCandidate = nil
+                            }
+                            Button("Cancel", role: .cancel) {
+                                pendingDeleteCandidate = nil
+                            }
+                        } footer: {
+                            Text("Deletion is permanent for files. Photo library deletion follows iOS behavior and may move items to Recently Deleted.")
+                        }
+                    }
+                    .navigationTitle("Review Deletion")
+                    .navigationBarTitleDisplayMode(.inline)
+                }
+            }
             .task {
                 if viewModel.insights.isEmpty {
                     await viewModel.load()

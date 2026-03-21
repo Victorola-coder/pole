@@ -39,6 +39,8 @@ struct PhotoLibraryScanner {
                     source: .photos,
                     displayName: asset.mediaType == .video ? "Video asset" : "Photo asset",
                     sizeBytes: bytes,
+                    createdAt: asset.creationDate,
+                    detailText: asset.mediaType == .video ? "Video from photo library" : "Photo from photo library",
                     photoAssetLocalIdentifier: asset.localIdentifier,
                     fileURL: nil
                 )

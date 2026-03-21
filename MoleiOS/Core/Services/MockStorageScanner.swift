@@ -17,6 +17,8 @@ struct MockStorageScanner: StorageScanning {
                 source: .photos,
                 displayName: "Large video sample",
                 sizeBytes: 750 * 1_024 * 1_024,
+                createdAt: Date().addingTimeInterval(-86_400 * 30),
+                detailText: "Likely old screen recording",
                 photoAssetLocalIdentifier: nil,
                 fileURL: nil
             ),
@@ -24,6 +26,8 @@ struct MockStorageScanner: StorageScanning {
                 source: .files,
                 displayName: "Unused download",
                 sizeBytes: 120 * 1_024 * 1_024,
+                createdAt: Date().addingTimeInterval(-86_400 * 90),
+                detailText: "Downloads folder",
                 photoAssetLocalIdentifier: nil,
                 fileURL: nil
             )
