@@ -18,6 +18,7 @@ struct ProtectedFolderPolicy: ProtectedFolderChecking {
 
     private func normalizedPath(for url: URL) -> String {
         let standardized = url.standardizedFileURL
-        return standardized.resolvingSymlinksInPath().path
+        let resolved = try? standardized.resolvingSymlinksInPath()
+        return (resolved ?? standardized).path
     }
 }
