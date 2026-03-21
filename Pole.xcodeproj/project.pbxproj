@@ -31,6 +31,7 @@
 		B71A6AD20D86B77AB3F78CC2 /* FolderAnalysisNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3AAA15D679F63B3C19A794 /* FolderAnalysisNode.swift */; };
 		C21A1304D02F17AB4CA2E217 /* AppIconPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096CA537FF6E8C871F5DF41C /* AppIconPreview.swift */; };
 		C4906F20D6A928AC4E00E152 /* PhotoLibraryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */; };
+		CE1FECCCFE568B79348D0A1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C2E5647E0C30BE907F8FD64 /* Assets.xcassets */; };
 		D34F26ECAE7F34BF4F3E404E /* StorageBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */; };
 		D4A910E31C9D94048F412510 /* ProtectedFolderPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192498D1EA7D2CAA27A89BC1 /* ProtectedFolderPolicy.swift */; };
 		E8D64963CF94E59F4D2CA0FB /* StorageInsight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8735156F720E5BDA342E367 /* StorageInsight.swift */; };
@@ -68,6 +69,7 @@
 		4C9D173B73A5DE646CEF7CAE /* DashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModelTests.swift; sourceTree = "<group>"; };
 		4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		4E87A905B7C496F78C586CD9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		5C2E5647E0C30BE907F8FD64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		687E8B212AEF49947FD32A6B /* DeletionAuditLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionAuditLogging.swift; sourceTree = "<group>"; };
 		87E10DA68ADDE538171B4665 /* LocalFileScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileScanner.swift; sourceTree = "<group>"; };
 		9009A358D32555927F13DEC3 /* PoleTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PoleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +123,7 @@
 		5753607A265088834C4306AF /* MoleiOS */ = {
 			isa = PBXGroup;
 			children = (
+				5C2E5647E0C30BE907F8FD64 /* Assets.xcassets */,
 				85E8EB73E220172AB2A31098 /* App */,
 				85B8A0BF45A5C22C1583949D /* Core */,
 				5505215A8E828B1F6CF86611 /* Features */,
@@ -245,6 +248,7 @@
 			buildConfigurationList = 72BEAFB0EB655CDA5C5FDFA9 /* Build configuration list for PBXNativeTarget "Pole" */;
 			buildPhases = (
 				87FE80675CF04C97DE13E8BF /* Sources */,
+				8C47B9500903A95665D99B13 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -287,6 +291,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8C47B9500903A95665D99B13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE1FECCCFE568B79348D0A1F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		25EC4C2E211EF9CEE17F7C7A /* Sources */ = {
