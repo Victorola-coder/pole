@@ -4,10 +4,12 @@ import SwiftUI
 struct PoleApp: App {
     @StateObject private var appState: AppState
     @StateObject private var dashboardViewModel: DashboardViewModel
+    private let auditLogger: LocalDeletionAuditLogger
 
     init() {
         let folderStore = ScopedFolderStore()
         let auditLogger = LocalDeletionAuditLogger()
+        self.auditLogger = auditLogger
         _appState = StateObject(
             wrappedValue: AppState(folderStore: folderStore)
         )
@@ -34,13 +36,25 @@ struct PoleApp: App {
                         Label("Storage", systemImage: "internaldrive")
                     }
 
-                SettingsView(appState: appState)
+                SettingsView(appState: appState, auditLogger: auditLogger)
                     .tabItem {
                         Label("Settings", systemImage: "gearshape")
                     }
             }
             .tint(appState.tintColor)
             .preferredColorScheme(appState.preferredColorScheme)
+            .fullScreenCover(isPresented: onboardingBinding) {
+                OnboardingView(appState: appState) {}
+            }
         }
+    }
+
+    private var onboardingBinding: Binding<Bool> {
+        Binding(
+            get: { !appState.isOnboardingComplete },
+            set: { newValue in
+                appState.isOnboardingComplete = !newValue
+            }
+        )
     }
 }

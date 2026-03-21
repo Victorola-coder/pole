@@ -20,5 +20,20 @@ jobs:
       - name: Generate project
         run: xcodegen generate
 
+      - name: Resolve simulator destination
+        id: sim
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone 16|iPhone 17/ {print $2; exit}')
+          if [[ -z "${DEST:-}" ]]; then
+            DEST=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ {print $2; exit}')
+          fi
+          if [[ -z "${DEST:-}" ]]; then
+            echo "No iPhone simulator available" >&2
+            exit 1
+          fi
+          echo "destination=id=$DEST" >> "$GITHUB_OUTPUT"
+
       - name: Build and test
-        run: xcodebuild -project Pole.xcodeproj -scheme Pole -destination 'platform=iOS Simulator,name=iPhone 16' -configuration Debug clean build test
+        run: xcodebuild -project Pole.xcodeproj -scheme Pole -destination "${{ steps.sim.outputs.destination }}" -configuration Debug clean build test

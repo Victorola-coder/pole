@@ -4,6 +4,7 @@ import UIKit
 
 struct SettingsView: View {
     @ObservedObject var appState: AppState
+    let auditLogger: DeletionAuditLogging
     @State private var photoPermissionStatus: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
     @State private var showClearFoldersConfirmation = false
 
@@ -21,7 +22,9 @@ struct SettingsView: View {
                             photoPermissionStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
                         }
                     }
-                    Link("Open iOS Settings", destination: URL(string: UIApplication.openSettingsURLString)!)
+                    if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                        Link("Open iOS Settings", destination: settingsURL)
+                    }
                 }
 
                 Section("Scan Behavior") {
@@ -53,20 +56,23 @@ struct SettingsView: View {
                     }
                 }
 
-//                Section("App Icon Concept") {
-//                    HStack {
-//                        Spacer()
-//                        AppIconPreview()
-//                        Spacer()
-//                    }
-//                    Text("Minimal flat concept: shield + sparkle, optimized for readability.")
-//                        .font(.footnote)
-//                        .foregroundStyle(.secondary)
-//                }
+                Section("App Icon Concept") {
+                    HStack {
+                        Spacer()
+                        AppIconPreview()
+                        Spacer()
+                    }
+                    Text("Minimal flat concept: shield + sparkle, optimized for readability.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
 
                 Section("Data Management") {
                     Button("Clear Saved Folder Access", role: .destructive) {
                         showClearFoldersConfirmation = true
+                    }
+                    NavigationLink("View Deletion Audit Log") {
+                        DeletionAuditLogView(auditLogger: auditLogger)
                     }
                 }
 
