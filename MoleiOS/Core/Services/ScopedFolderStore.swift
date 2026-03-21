@@ -6,6 +6,17 @@ protocol ScopedFolderStoring {
     func clearFolders()
 }
 
+enum ScopedFolderStoreError: LocalizedError {
+    case duplicateFolder
+
+    var errorDescription: String? {
+        switch self {
+        case .duplicateFolder:
+            return "That folder has already been added."
+        }
+    }
+}
+
 final class ScopedFolderStore: ScopedFolderStoring {
     private let userDefaults: UserDefaults
     private let bookmarkKey = "scoped_folder_bookmarks"
@@ -21,6 +32,10 @@ final class ScopedFolderStore: ScopedFolderStoring {
     }
 
     func addFolder(_ url: URL) throws {
+        if cachedURLs.contains(where: { $0.standardizedFileURL.path == url.standardizedFileURL.path }) {
+            throw ScopedFolderStoreError.duplicateFolder
+        }
+
         let bookmarkData = try url.bookmarkData()
         var allBookmarks = userDefaults.array(forKey: bookmarkKey) as? [Data] ?? []
         allBookmarks.append(bookmarkData)
@@ -39,6 +54,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
     private func resolveBookmarks() -> [URL] {
         let allBookmarks = userDefaults.array(forKey: bookmarkKey) as? [Data] ?? []
         var urls: [URL] = []
+        var refreshedBookmarks: [Data] = []
 
         for bookmark in allBookmarks {
             var isStale = false
@@ -54,6 +70,18 @@ final class ScopedFolderStore: ScopedFolderStoring {
 
             _ = url.startAccessingSecurityScopedResource()
             urls.append(url)
+
+            if isStale {
+                if let freshBookmark = try? url.bookmarkData() {
+                    refreshedBookmarks.append(freshBookmark)
+                }
+            } else {
+                refreshedBookmarks.append(bookmark)
+            }
+        }
+
+        if refreshedBookmarks.count != allBookmarks.count || refreshedBookmarks != allBookmarks {
+            userDefaults.set(refreshedBookmarks, forKey: bookmarkKey)
         }
         return urls
     }

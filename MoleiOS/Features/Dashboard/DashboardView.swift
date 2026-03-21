@@ -19,9 +19,29 @@ struct DashboardView: View {
         NavigationStack {
             Group {
                 if viewModel.isLoading {
-                    ProgressView("Scanning storage...")
+                    VStack(spacing: 14) {
+                        ProgressView(value: viewModel.scanProgress)
+                        Text(viewModel.scanStatusText)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Button("Cancel Scan", role: .cancel) {
+                            viewModel.cancelScan()
+                        }
+                    }
+                    .padding()
                 } else if let errorMessage = viewModel.errorMessage {
                     ContentUnavailableView("Scan failed", systemImage: "exclamationmark.triangle", description: Text(errorMessage))
+                        .overlay(alignment: .bottom) {
+                            HStack(spacing: 12) {
+                                Button("Retry") {
+                                    Task { await viewModel.load() }
+                                }
+                                Button("Dismiss") {
+                                    viewModel.clearError()
+                                }
+                            }
+                            .padding(.bottom, 20)
+                        }
                 } else {
                     List {
                         if !viewModel.canScanPhotos {

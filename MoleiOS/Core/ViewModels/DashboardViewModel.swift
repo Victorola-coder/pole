@@ -5,6 +5,8 @@ final class DashboardViewModel: ObservableObject {
     @Published private(set) var insights: [StorageInsight] = []
     @Published private(set) var candidates: [CleanupCandidate] = []
     @Published private(set) var isLoading = false
+    @Published private(set) var scanProgress: Double = 0
+    @Published private(set) var scanStatusText = "Idle"
     @Published private(set) var errorMessage: String?
     @Published private(set) var canScanPhotos = false
     @Published private(set) var scopedFolderNames: [String] = []
@@ -13,6 +15,7 @@ final class DashboardViewModel: ObservableObject {
     private let cleanupService: CleanupServicing
     private let permissionService: PermissionServicing
     private let scopedFolderStore: ScopedFolderStoring
+    private var currentScanTask: Task<Void, Never>?
 
     init(
         scanner: StorageScanning,
@@ -40,35 +43,91 @@ final class DashboardViewModel: ObservableObject {
         canScanPhotos = await permissionService.requestPhotoAccess()
     }
 
-    func load() async {
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
+    func syncScopedFolders() {
+        scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
+    }
 
-        do {
-            insights = try await scanner.scan()
-            candidates = try await scanner.scanCandidates()
-        } catch {
-            errorMessage = "Scan failed. Please try again."
+    func load() async {
+        currentScanTask?.cancel()
+
+        let task = Task { @MainActor in
+            isLoading = true
+            scanProgress = 0
+            scanStatusText = "Starting scan..."
+            errorMessage = nil
+            defer {
+                isLoading = false
+                scanProgress = 1
+                scanStatusText = "Completed"
+            }
+
+            do {
+                scanStatusText = "Scanning storage categories..."
+                insights = try await scanner.scan()
+                try Task.checkCancellation()
+                scanProgress = 0.5
+
+                scanStatusText = "Collecting cleanup candidates..."
+                candidates = try await scanner.scanCandidates()
+                try Task.checkCancellation()
+                scanProgress = 1
+            } catch is CancellationError {
+                scanStatusText = "Scan cancelled"
+            } catch {
+                errorMessage = humanReadableScanError(error)
+                scanStatusText = "Scan failed"
+            }
         }
+        currentScanTask = task
+        await task.value
+    }
+
+    func cancelScan() {
+        currentScanTask?.cancel()
+    }
+
+    private func humanReadableScanError(_ error: Error) -> String {
+        if let localizedError = error as? LocalizedError, let description = localizedError.errorDescription {
+            return description
+        }
+        return "Scan failed. Please try again."
+    }
+
+    func setError(_ message: String) {
+        errorMessage = message
+    }
+
+    func clearError() {
+        errorMessage = nil
+    }
+
+    func importFolderFailed() {
+        errorMessage = "Could not import folder. Please try again."
+    }
+
+    func refreshFromSettings() async {
+        syncScopedFolders()
+        await load()
+    }
+
+    func delete(candidate: CleanupCandidate) async {
+        isLoading = true
+        do {
+            try await cleanupService.delete(candidate: candidate)
+            await load()
+        } catch {
+            errorMessage = (error as? LocalizedError)?.errorDescription ?? "Delete failed. Please try again."
+        }
+        isLoading = false
     }
 
     func addScopedFolder(url: URL) async {
         do {
             try scopedFolderStore.addFolder(url)
-            scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
+            syncScopedFolders()
             await load()
         } catch {
-            errorMessage = "Could not add folder access."
-        }
-    }
-
-    func delete(candidate: CleanupCandidate) async {
-        do {
-            try await cleanupService.delete(candidate: candidate)
-            await load()
-        } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = (error as? LocalizedError)?.errorDescription ?? "Could not add folder access."
         }
     }
 }

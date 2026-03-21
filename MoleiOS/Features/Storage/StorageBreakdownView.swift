@@ -50,10 +50,11 @@ struct StorageBreakdownView: View {
                         await viewModel.addScopedFolder(url: url)
                     }
                 case .failure:
-                    break
+                    viewModel.importFolderFailed()
                 }
             }
             .task {
+                viewModel.syncScopedFolders()
                 if viewModel.insights.isEmpty {
                     await viewModel.load()
                 }
