@@ -2,11 +2,14 @@ import SwiftUI
 
 @main
 struct PoleApp: App {
-    @StateObject private var appState = AppState()
+    @StateObject private var appState: AppState
     @StateObject private var dashboardViewModel: DashboardViewModel
 
     init() {
         let folderStore = ScopedFolderStore()
+        _appState = StateObject(
+            wrappedValue: AppState(folderStore: folderStore)
+        )
         _dashboardViewModel = StateObject(
             wrappedValue: DashboardViewModel(
                 scanner: CompositeStorageScanner(folderStore: folderStore),

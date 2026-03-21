@@ -23,11 +23,13 @@
 		C4906F20D6A928AC4E00E152 /* PhotoLibraryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */; };
 		D34F26ECAE7F34BF4F3E404E /* StorageBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */; };
 		E8D64963CF94E59F4D2CA0FB /* StorageInsight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8735156F720E5BDA342E367 /* StorageInsight.swift */; };
+		FF3464DDAAE7BA62230E87C8 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD5C201901C0EC0E017A56C /* AppPreferences.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		06914BB3990184C4532AB80B /* MockStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStorageScanner.swift; sourceTree = "<group>"; };
 		1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryScanner.swift; sourceTree = "<group>"; };
+		1FD5C201901C0EC0E017A56C /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
 		25E673B59D3C2372AF2A1780 /* CleanupCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidate.swift; sourceTree = "<group>"; };
 		3716EF9626CB62AAB9366213 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidatePreview.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		DB4D53E66D15A00C4F2ECD6D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				1FD5C201901C0EC0E017A56C /* AppPreferences.swift */,
 				AA5DCAB56D7647AC872006EC /* CleanupService.swift */,
 				E4D38982AC5A5855A82CCEC2 /* CompositeStorageScanner.swift */,
 				87E10DA68ADDE538171B4665 /* LocalFileScanner.swift */,
@@ -212,6 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF3464DDAAE7BA62230E87C8 /* AppPreferences.swift in Sources */,
 				4C813EE6E616BA82996EE6FC /* AppState.swift in Sources */,
 				B700DE8285A39F3D5082872C /* CleanupCandidate.swift in Sources */,
 				8B87179EAAED9C2962F5EF51 /* CleanupCandidatePreview.swift in Sources */,
