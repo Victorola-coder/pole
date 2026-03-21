@@ -67,7 +67,7 @@ struct DashboardView: View {
                                                 .foregroundStyle(.secondary)
                                         }
                                         Spacer()
-                                        Text(String(format: "%.2f GB", item.sizeGigabytes))
+                                        Text(item.sizeLabel)
                                             .font(.footnote)
                                         Button("Delete", role: .destructive) {
                                             pendingDeleteCandidate = item
@@ -105,7 +105,7 @@ struct DashboardView: View {
                         }
 
                         Section("Metadata") {
-                            statRow(title: "Size", value: String(format: "%.2f GB", item.sizeGigabytes))
+                            statRow(title: "Size", value: item.sizeLabel)
                             if let createdAt = item.createdAt {
                                 statRow(title: "Created", value: createdAt.formatted(date: .abbreviated, time: .shortened))
                             }

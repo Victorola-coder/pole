@@ -19,8 +19,16 @@ struct CleanupCandidate: Identifiable {
 }
 
 extension CleanupCandidate {
+    var sizeMegabytes: Double {
+        Double(sizeBytes) / 1_048_576.0
+    }
+
     var sizeGigabytes: Double {
         Double(sizeBytes) / 1_073_741_824.0
+    }
+
+    var sizeLabel: String {
+        String(format: "%.0f MB (%.2f GB)", sizeMegabytes, sizeGigabytes)
     }
 
     var sourceSymbolName: String {
