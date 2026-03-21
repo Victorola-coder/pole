@@ -3,12 +3,12 @@ import Foundation
 struct LocalFileScanner {
     private let directories: [URL]
 
-    init(fileManager: FileManager = .default) {
+    init(additionalDirectories: [URL], fileManager: FileManager = .default) {
         self.directories = [
             fileManager.urls(for: .documentDirectory, in: .userDomainMask).first,
             fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
         ]
-        .compactMap { $0 }
+        .compactMap { $0 } + additionalDirectories
     }
 
     func scanInsights() async -> [StorageInsight] {

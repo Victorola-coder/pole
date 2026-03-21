@@ -7,20 +7,25 @@ final class DashboardViewModel: ObservableObject {
     @Published private(set) var isLoading = false
     @Published private(set) var errorMessage: String?
     @Published private(set) var canScanPhotos = false
+    @Published private(set) var scopedFolderNames: [String] = []
 
     private let scanner: StorageScanning
     private let cleanupService: CleanupServicing
     private let permissionService: PermissionServicing
+    private let scopedFolderStore: ScopedFolderStoring
 
     init(
         scanner: StorageScanning,
         cleanupService: CleanupServicing,
-        permissionService: PermissionServicing
+        permissionService: PermissionServicing,
+        scopedFolderStore: ScopedFolderStoring
     ) {
         self.scanner = scanner
         self.cleanupService = cleanupService
         self.permissionService = permissionService
+        self.scopedFolderStore = scopedFolderStore
         self.canScanPhotos = permissionService.canScanPhotos
+        self.scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
     }
 
     var totalUsed: Double {
@@ -45,6 +50,16 @@ final class DashboardViewModel: ObservableObject {
             candidates = try await scanner.scanCandidates()
         } catch {
             errorMessage = "Scan failed. Please try again."
+        }
+    }
+
+    func addScopedFolder(url: URL) async {
+        do {
+            try scopedFolderStore.addFolder(url)
+            scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
+            await load()
+        } catch {
+            errorMessage = "Could not add folder access."
         }
     }
 

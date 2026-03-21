@@ -3,10 +3,15 @@ import Photos
 
 struct CompositeStorageScanner: StorageScanning {
     private let photoScanner = PhotoLibraryScanner()
-    private let localFileScanner = LocalFileScanner()
+    private let folderStore: ScopedFolderStoring
+
+    init(folderStore: ScopedFolderStoring) {
+        self.folderStore = folderStore
+    }
 
     func scan() async throws -> [StorageInsight] {
         var insights: [StorageInsight] = []
+        let localFileScanner = LocalFileScanner(additionalDirectories: folderStore.scopedFolders())
 
         if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized
             || PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
@@ -18,6 +23,7 @@ struct CompositeStorageScanner: StorageScanning {
     }
 
     func scanCandidates() async throws -> [CleanupCandidate] {
+        let localFileScanner = LocalFileScanner(additionalDirectories: folderStore.scopedFolders())
         var candidates: [CleanupCandidate] = await localFileScanner.scanCandidates()
 
         if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized

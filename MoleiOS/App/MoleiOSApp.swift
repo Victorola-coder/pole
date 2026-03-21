@@ -3,11 +3,19 @@ import SwiftUI
 @main
 struct PoleApp: App {
     @StateObject private var appState = AppState()
-    @StateObject private var dashboardViewModel = DashboardViewModel(
-        scanner: CompositeStorageScanner(),
-        cleanupService: CleanupService(),
-        permissionService: PermissionService()
-    )
+    @StateObject private var dashboardViewModel: DashboardViewModel
+
+    init() {
+        let folderStore = ScopedFolderStore()
+        _dashboardViewModel = StateObject(
+            wrappedValue: DashboardViewModel(
+                scanner: CompositeStorageScanner(folderStore: folderStore),
+                cleanupService: CleanupService(),
+                permissionService: PermissionService(),
+                scopedFolderStore: folderStore
+            )
+        )
+    }
 
     var body: some Scene {
         WindowGroup {
