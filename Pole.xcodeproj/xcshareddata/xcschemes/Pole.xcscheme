@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8E5359A27D88CACB5375A908"
-               BuildableName = "MoleiOS.app"
-               BlueprintName = "MoleiOS"
-               ReferencedContainer = "container:MoleiOS.xcodeproj">
+               BlueprintIdentifier = "AFB11BABC2B99D460E0335C1"
+               BuildableName = "Pole.app"
+               BlueprintName = "Pole"
+               ReferencedContainer = "container:Pole.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8E5359A27D88CACB5375A908"
-            BuildableName = "MoleiOS.app"
-            BlueprintName = "MoleiOS"
-            ReferencedContainer = "container:MoleiOS.xcodeproj">
+            BlueprintIdentifier = "AFB11BABC2B99D460E0335C1"
+            BuildableName = "Pole.app"
+            BlueprintName = "Pole"
+            ReferencedContainer = "container:Pole.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -57,10 +57,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8E5359A27D88CACB5375A908"
-            BuildableName = "MoleiOS.app"
-            BlueprintName = "MoleiOS"
-            ReferencedContainer = "container:MoleiOS.xcodeproj">
+            BlueprintIdentifier = "AFB11BABC2B99D460E0335C1"
+            BuildableName = "Pole.app"
+            BlueprintName = "Pole"
+            ReferencedContainer = "container:Pole.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -76,10 +76,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8E5359A27D88CACB5375A908"
-            BuildableName = "MoleiOS.app"
-            BlueprintName = "MoleiOS"
-            ReferencedContainer = "container:MoleiOS.xcodeproj">
+            BlueprintIdentifier = "AFB11BABC2B99D460E0335C1"
+            BuildableName = "Pole.app"
+            BlueprintName = "Pole"
+            ReferencedContainer = "container:Pole.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>

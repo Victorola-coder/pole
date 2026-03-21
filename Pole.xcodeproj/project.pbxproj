@@ -7,156 +7,156 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A461E6A6002581CA49DE25B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCFD44AFB29806203363738 /* SettingsView.swift */; };
-		71AB6389B1F9DD5F36A7C151 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431122F1EAF1EF23044A5A08 /* DashboardViewModel.swift */; };
-		8C23AEE6D5EA9F7F5D9769AC /* StorageBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD35C4187AC59BFCEAE13854 /* StorageBreakdownView.swift */; };
-		961F8267CF123A19A48AF935 /* MoleiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4931424BC095DDF2D427299 /* MoleiOSApp.swift */; };
-		97386240B3696CFB7AFA9B8D /* StorageInsight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608A033D16190E2F9208264C /* StorageInsight.swift */; };
-		9E852C420C9968D9A87249A7 /* MockStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3A11E8D16BDDE9C557104C /* MockStorageScanner.swift */; };
-		A0B94F8C8F28698DF7EE20C7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ED225FD6A90233D73B8EFE /* AppState.swift */; };
-		E6126F05C393DBAA760BDEE9 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20633BFD87E4D750B8393C1F /* DashboardView.swift */; };
+		1B4BE97544B693BAF771B14A /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87A905B7C496F78C586CD9 /* DashboardView.swift */; };
+		2C0A814FEFFE550357AC68C9 /* MoleiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */; };
+		428D1AA52999E72BBBDB9B94 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */; };
+		4C813EE6E616BA82996EE6FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC05156DB8C1D5C7AEAC5565 /* AppState.swift */; };
+		76FFA07ED65E43C8DCB7D9C2 /* MockStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06914BB3990184C4532AB80B /* MockStorageScanner.swift */; };
+		988134C2EDFA5E50316529F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3716EF9626CB62AAB9366213 /* SettingsView.swift */; };
+		D34F26ECAE7F34BF4F3E404E /* StorageBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */; };
+		E8D64963CF94E59F4D2CA0FB /* StorageInsight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8735156F720E5BDA342E367 /* StorageInsight.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		20633BFD87E4D750B8393C1F /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		2C3A11E8D16BDDE9C557104C /* MockStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStorageScanner.swift; sourceTree = "<group>"; };
-		3DCFD44AFB29806203363738 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		431122F1EAF1EF23044A5A08 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
-		4C0DE6AD3914A09DDF443A78 /* MoleiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MoleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		608A033D16190E2F9208264C /* StorageInsight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageInsight.swift; sourceTree = "<group>"; };
-		B0ED225FD6A90233D73B8EFE /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		DD35C4187AC59BFCEAE13854 /* StorageBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageBreakdownView.swift; sourceTree = "<group>"; };
-		E4931424BC095DDF2D427299 /* MoleiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoleiOSApp.swift; sourceTree = "<group>"; };
+		06914BB3990184C4532AB80B /* MockStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStorageScanner.swift; sourceTree = "<group>"; };
+		3716EF9626CB62AAB9366213 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoleiOSApp.swift; sourceTree = "<group>"; };
+		4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		4E87A905B7C496F78C586CD9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageBreakdownView.swift; sourceTree = "<group>"; };
+		CC05156DB8C1D5C7AEAC5565 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		E74270C1A63F8C0D4EAF9921 /* Pole.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pole.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8735156F720E5BDA342E367 /* StorageInsight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageInsight.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		06ACD5C3C9E82E7A0866C354 /* Core */ = {
+		0FF27800084E8108C6A410DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8E1729287E5A46EADFB6C6A6 /* Models */,
-				7680FFD2F487E592EBDAEA0D /* Services */,
-				128D9DADAD42D7F8756F7AE4 /* ViewModels */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		0F8DA17B43C341E1AF8C7469 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				B0ED225FD6A90233D73B8EFE /* AppState.swift */,
-				E4931424BC095DDF2D427299 /* MoleiOSApp.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		128D9DADAD42D7F8756F7AE4 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				431122F1EAF1EF23044A5A08 /* DashboardViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		25B6D597EA9B6C1D65933124 = {
-			isa = PBXGroup;
-			children = (
-				C7632E1E1F372EEA8405A8AA /* MoleiOS */,
-				732D2AD874B278140DD65C0F /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		61513E8315C6B43545B4EC67 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				3DCFD44AFB29806203363738 /* SettingsView.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		65E348F693D44AF04A26174C /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				DD35C4187AC59BFCEAE13854 /* StorageBreakdownView.swift */,
-			);
-			path = Storage;
-			sourceTree = "<group>";
-		};
-		732D2AD874B278140DD65C0F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4C0DE6AD3914A09DDF443A78 /* MoleiOS.app */,
+				E74270C1A63F8C0D4EAF9921 /* Pole.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7680FFD2F487E592EBDAEA0D /* Services */ = {
+		5505215A8E828B1F6CF86611 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				2C3A11E8D16BDDE9C557104C /* MockStorageScanner.swift */,
+				608E04F7CA3D0656B0EAEE16 /* Dashboard */,
+				BE399CE6A5FCC19B38A5FD5F /* Settings */,
+				A273C3293E04455BF52ECB0B /* Storage */,
 			);
-			path = Services;
+			path = Features;
 			sourceTree = "<group>";
 		};
-		8E1729287E5A46EADFB6C6A6 /* Models */ = {
+		5753607A265088834C4306AF /* MoleiOS */ = {
 			isa = PBXGroup;
 			children = (
-				608A033D16190E2F9208264C /* StorageInsight.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		C7632E1E1F372EEA8405A8AA /* MoleiOS */ = {
-			isa = PBXGroup;
-			children = (
-				0F8DA17B43C341E1AF8C7469 /* App */,
-				06ACD5C3C9E82E7A0866C354 /* Core */,
-				DC354A92DC9871059FC8F2C9 /* Features */,
+				85E8EB73E220172AB2A31098 /* App */,
+				85B8A0BF45A5C22C1583949D /* Core */,
+				5505215A8E828B1F6CF86611 /* Features */,
 			);
 			path = MoleiOS;
 			sourceTree = "<group>";
 		};
-		D7B70C6BE8E47B9CAE29F71F /* Dashboard */ = {
+		608E04F7CA3D0656B0EAEE16 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				20633BFD87E4D750B8393C1F /* DashboardView.swift */,
+				4E87A905B7C496F78C586CD9 /* DashboardView.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
-		DC354A92DC9871059FC8F2C9 /* Features */ = {
+		691517486F0891F2EBB86C20 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				D7B70C6BE8E47B9CAE29F71F /* Dashboard */,
-				61513E8315C6B43545B4EC67 /* Settings */,
-				65E348F693D44AF04A26174C /* Storage */,
+				4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */,
 			);
-			path = Features;
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		85B8A0BF45A5C22C1583949D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				F86279603C2AC62FC5691B8C /* Models */,
+				DB4D53E66D15A00C4F2ECD6D /* Services */,
+				691517486F0891F2EBB86C20 /* ViewModels */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		85E8EB73E220172AB2A31098 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				CC05156DB8C1D5C7AEAC5565 /* AppState.swift */,
+				41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A273C3293E04455BF52ECB0B /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		BE399CE6A5FCC19B38A5FD5F /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				3716EF9626CB62AAB9366213 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		DB4D53E66D15A00C4F2ECD6D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				06914BB3990184C4532AB80B /* MockStorageScanner.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		DD4E4D4A2C31B630F182F370 = {
+			isa = PBXGroup;
+			children = (
+				5753607A265088834C4306AF /* MoleiOS */,
+				0FF27800084E8108C6A410DD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F86279603C2AC62FC5691B8C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E8735156F720E5BDA342E367 /* StorageInsight.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8E5359A27D88CACB5375A908 /* MoleiOS */ = {
+		AFB11BABC2B99D460E0335C1 /* Pole */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BD357811F556575E44230862 /* Build configuration list for PBXNativeTarget "MoleiOS" */;
+			buildConfigurationList = 72BEAFB0EB655CDA5C5FDFA9 /* Build configuration list for PBXNativeTarget "Pole" */;
 			buildPhases = (
-				77FB459AA2267955A32F5D57 /* Sources */,
+				87FE80675CF04C97DE13E8BF /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = MoleiOS;
+			name = Pole;
 			packageProductDependencies = (
 			);
-			productName = MoleiOS;
-			productReference = 4C0DE6AD3914A09DDF443A78 /* MoleiOS.app */;
+			productName = Pole;
+			productReference = E74270C1A63F8C0D4EAF9921 /* Pole.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		8B86A4F06F4323D0530A1890 /* Project object */ = {
+		EFA2BF0B0CDBA937139E0820 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
@@ -164,45 +164,102 @@
 				TargetAttributes = {
 				};
 			};
-			buildConfigurationList = D65D1AABE12C6610BBF362EA /* Build configuration list for PBXProject "MoleiOS" */;
+			buildConfigurationList = DA1333C1B769F3E2BBEC76EB /* Build configuration list for PBXProject "Pole" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				en,
 			);
-			mainGroup = 25B6D597EA9B6C1D65933124;
+			mainGroup = DD4E4D4A2C31B630F182F370;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 732D2AD874B278140DD65C0F /* Products */;
+			productRefGroup = 0FF27800084E8108C6A410DD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8E5359A27D88CACB5375A908 /* MoleiOS */,
+				AFB11BABC2B99D460E0335C1 /* Pole */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		77FB459AA2267955A32F5D57 /* Sources */ = {
+		87FE80675CF04C97DE13E8BF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0B94F8C8F28698DF7EE20C7 /* AppState.swift in Sources */,
-				E6126F05C393DBAA760BDEE9 /* DashboardView.swift in Sources */,
-				71AB6389B1F9DD5F36A7C151 /* DashboardViewModel.swift in Sources */,
-				9E852C420C9968D9A87249A7 /* MockStorageScanner.swift in Sources */,
-				961F8267CF123A19A48AF935 /* MoleiOSApp.swift in Sources */,
-				0A461E6A6002581CA49DE25B /* SettingsView.swift in Sources */,
-				8C23AEE6D5EA9F7F5D9769AC /* StorageBreakdownView.swift in Sources */,
-				97386240B3696CFB7AFA9B8D /* StorageInsight.swift in Sources */,
+				4C813EE6E616BA82996EE6FC /* AppState.swift in Sources */,
+				1B4BE97544B693BAF771B14A /* DashboardView.swift in Sources */,
+				428D1AA52999E72BBBDB9B94 /* DashboardViewModel.swift in Sources */,
+				76FFA07ED65E43C8DCB7D9C2 /* MockStorageScanner.swift in Sources */,
+				2C0A814FEFFE550357AC68C9 /* MoleiOSApp.swift in Sources */,
+				988134C2EDFA5E50316529F2 /* SettingsView.swift in Sources */,
+				D34F26ECAE7F34BF4F3E404E /* StorageBreakdownView.swift in Sources */,
+				E8D64963CF94E59F4D2CA0FB /* StorageInsight.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		02CC8F5610531B13448318E2 /* Debug */ = {
+		67F6DB1DDFE90CE0F06F7DB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.victor.pole;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.1;
+			};
+			name = Release;
+		};
+		B4A8F8208FE6169DC202B0EB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -257,7 +314,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.victor.moleios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.victor.pole;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -266,70 +323,33 @@
 			};
 			name = Debug;
 		};
-		06D7E5B7C02D4454A6581CBE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.victor.moleios;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.1;
-			};
-			name = Release;
-		};
-		42A933A12B3E9E60B18904E6 /* Debug */ = {
+		E4EB9DDB27AE720F53C8A178 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = MoleiOS;
+				INFOPLIST_KEY_CFBundleDisplayName = Pole;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F2563EE22CA70E19CB79799C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Pole;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -343,48 +363,28 @@
 			};
 			name = Debug;
 		};
-		81D64CA574AE135BE4D01D90 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = MoleiOS;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BD357811F556575E44230862 /* Build configuration list for PBXNativeTarget "MoleiOS" */ = {
+		72BEAFB0EB655CDA5C5FDFA9 /* Build configuration list for PBXNativeTarget "Pole" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				42A933A12B3E9E60B18904E6 /* Debug */,
-				81D64CA574AE135BE4D01D90 /* Release */,
+				F2563EE22CA70E19CB79799C /* Debug */,
+				E4EB9DDB27AE720F53C8A178 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		D65D1AABE12C6610BBF362EA /* Build configuration list for PBXProject "MoleiOS" */ = {
+		DA1333C1B769F3E2BBEC76EB /* Build configuration list for PBXProject "Pole" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				02CC8F5610531B13448318E2 /* Debug */,
-				06D7E5B7C02D4454A6581CBE /* Release */,
+				B4A8F8208FE6169DC202B0EB /* Debug */,
+				67F6DB1DDFE90CE0F06F7DB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 8B86A4F06F4323D0530A1890 /* Project object */;
+	rootObject = EFA2BF0B0CDBA937139E0820 /* Project object */;
 }

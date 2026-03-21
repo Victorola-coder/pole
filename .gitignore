@@ -4,3 +4,18 @@ build/
 *.xcworkspace
 xcuserdata/
 .DerivedData
+
+# Xcode user-specific files
+*.xcuserstate
+**/xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+
+# Fastlane and test output
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
