@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MoleiOSApp: App {
+struct PoleApp: App {
     @StateObject private var appState = AppState()
 
     var body: some Scene {

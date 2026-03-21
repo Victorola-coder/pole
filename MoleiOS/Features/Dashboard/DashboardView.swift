@@ -17,8 +17,8 @@ struct DashboardView: View {
                 } else {
                     List {
                         Section("Overview") {
-                            statRow(title: "Used Storage", value: "\(viewModel.totalUsed, specifier: "%.1f") GB")
-                            statRow(title: "Potential Savings", value: "\(viewModel.totalRecoverable, specifier: "%.1f") GB")
+                            statRow(title: "Used Storage", value: String(format: "%.1f GB", viewModel.totalUsed))
+                            statRow(title: "Potential Savings", value: String(format: "%.1f GB", viewModel.totalRecoverable))
                         }
 
                         Section("Suggestions") {
@@ -36,7 +36,7 @@ struct DashboardView: View {
                     }
                 }
             }
-            .navigationTitle("MoleiOS")
+            .navigationTitle("Pole")
             .task {
                 if viewModel.insights.isEmpty {
                     await viewModel.load()

@@ -1,4 +1,4 @@
-# MoleiOS
+# Pole
 
 SwiftUI starter codebase for an iOS-first "Mole-like" cleanup assistant.
 
@@ -22,7 +22,7 @@ SwiftUI starter codebase for an iOS-first "Mole-like" cleanup assistant.
 1. Generate project:
    - `xcodegen generate`
 2. Open:
-   - `open MoleiOS.xcodeproj`
+   - `open Pole.xcodeproj`
 3. Build and run on iOS Simulator.
 
 ## Notes
