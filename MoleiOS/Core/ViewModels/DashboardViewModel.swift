@@ -129,10 +129,10 @@ final class DashboardViewModel: ObservableObject {
         isLoading = true
         do {
             try await cleanupService.delete(candidate: candidate, options: options)
+            await load()
             if options.dryRun {
                 errorMessage = "Dry run completed. No data was deleted."
             }
-            await load()
         } catch {
             errorMessage = (error as? LocalizedError)?.errorDescription ?? "Delete failed. Please try again."
         }

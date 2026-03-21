@@ -8,16 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		072366FDC21959FFCF33CD0D /* DeletionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E79DD6F8F82F0EC6208F893 /* DeletionOptions.swift */; };
+		09C682737D45B84930B2A892 /* ProtectedFolderPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383A4C79ACE27FF69FC8F49D /* ProtectedFolderPolicyTests.swift */; };
 		0F302CFDC426866EDD7CEAD0 /* DashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D173B73A5DE646CEF7CAE /* DashboardViewModelTests.swift */; };
 		1B4BE97544B693BAF771B14A /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87A905B7C496F78C586CD9 /* DashboardView.swift */; };
 		1C2CFF1C3C3B11E6F12D0B74 /* CleanupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DCAB56D7647AC872006EC /* CleanupService.swift */; };
+		1DB3C40705D4F178AEE3285E /* LocalDeletionAuditLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90B872D58AB2D97B1874FF9 /* LocalDeletionAuditLoggerTests.swift */; };
 		2C0A814FEFFE550357AC68C9 /* MoleiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */; };
 		2C97F18C3C439E94B4053CB8 /* LocalFileScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E10DA68ADDE538171B4665 /* LocalFileScanner.swift */; };
 		324CFB8E8A49B0BC9183D29E /* DeletionAuditLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687E8B212AEF49947FD32A6B /* DeletionAuditLogging.swift */; };
 		428D1AA52999E72BBBDB9B94 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */; };
 		4C813EE6E616BA82996EE6FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC05156DB8C1D5C7AEAC5565 /* AppState.swift */; };
+		50A9CC46F73CBBA279E9DF9B /* CleanupServiceDryRunTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BB9D8EC81A2EC2B9A8A2F3 /* CleanupServiceDryRunTests.swift */; };
 		51D106C3CF98EDB0298A20A5 /* PermissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F53C5A25D68303712BDE9 /* PermissionService.swift */; };
 		523B65FB5D6CF131CE3A67B8 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9417032ED746FB6F865006B /* AppStateTests.swift */; };
+		5A30D8445D102BE86F87E075 /* ScopedFolderAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1714F8E5ECE2B2043311AA20 /* ScopedFolderAnalyzerTests.swift */; };
 		76FFA07ED65E43C8DCB7D9C2 /* MockStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06914BB3990184C4532AB80B /* MockStorageScanner.swift */; };
 		8B87179EAAED9C2962F5EF51 /* CleanupCandidatePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */; };
 		988134C2EDFA5E50316529F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3716EF9626CB62AAB9366213 /* SettingsView.swift */; };
@@ -48,13 +52,16 @@
 /* Begin PBXFileReference section */
 		032FBA9C25D9EC232D0E5038 /* DeletionAuditEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionAuditEntry.swift; sourceTree = "<group>"; };
 		06914BB3990184C4532AB80B /* MockStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStorageScanner.swift; sourceTree = "<group>"; };
+		08BB9D8EC81A2EC2B9A8A2F3 /* CleanupServiceDryRunTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupServiceDryRunTests.swift; sourceTree = "<group>"; };
 		096CA537FF6E8C871F5DF41C /* AppIconPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconPreview.swift; sourceTree = "<group>"; };
+		1714F8E5ECE2B2043311AA20 /* ScopedFolderAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopedFolderAnalyzerTests.swift; sourceTree = "<group>"; };
 		192498D1EA7D2CAA27A89BC1 /* ProtectedFolderPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectedFolderPolicy.swift; sourceTree = "<group>"; };
 		1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryScanner.swift; sourceTree = "<group>"; };
 		1E79DD6F8F82F0EC6208F893 /* DeletionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionOptions.swift; sourceTree = "<group>"; };
 		1FD5C201901C0EC0E017A56C /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
 		25E673B59D3C2372AF2A1780 /* CleanupCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidate.swift; sourceTree = "<group>"; };
 		3716EF9626CB62AAB9366213 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		383A4C79ACE27FF69FC8F49D /* ProtectedFolderPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectedFolderPolicyTests.swift; sourceTree = "<group>"; };
 		3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidatePreview.swift; sourceTree = "<group>"; };
 		41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoleiOSApp.swift; sourceTree = "<group>"; };
 		4A3AAA15D679F63B3C19A794 /* FolderAnalysisNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderAnalysisNode.swift; sourceTree = "<group>"; };
@@ -72,6 +79,7 @@
 		E4D38982AC5A5855A82CCEC2 /* CompositeStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeStorageScanner.swift; sourceTree = "<group>"; };
 		E74270C1A63F8C0D4EAF9921 /* Pole.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pole.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8735156F720E5BDA342E367 /* StorageInsight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageInsight.swift; sourceTree = "<group>"; };
+		E90B872D58AB2D97B1874FF9 /* LocalDeletionAuditLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDeletionAuditLoggerTests.swift; sourceTree = "<group>"; };
 		E9417032ED746FB6F865006B /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		F23F53C5A25D68303712BDE9 /* PermissionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,7 +99,11 @@
 			children = (
 				E9417032ED746FB6F865006B /* AppStateTests.swift */,
 				D3AAC026AB3F8A2EDB2E69D5 /* CleanupCandidateTests.swift */,
+				08BB9D8EC81A2EC2B9A8A2F3 /* CleanupServiceDryRunTests.swift */,
 				4C9D173B73A5DE646CEF7CAE /* DashboardViewModelTests.swift */,
+				E90B872D58AB2D97B1874FF9 /* LocalDeletionAuditLoggerTests.swift */,
+				383A4C79ACE27FF69FC8F49D /* ProtectedFolderPolicyTests.swift */,
+				1714F8E5ECE2B2043311AA20 /* ScopedFolderAnalyzerTests.swift */,
 			);
 			path = PoleTests;
 			sourceTree = "<group>";
@@ -283,7 +295,11 @@
 			files = (
 				523B65FB5D6CF131CE3A67B8 /* AppStateTests.swift in Sources */,
 				EF85CEED5BA508407D5641FB /* CleanupCandidateTests.swift in Sources */,
+				50A9CC46F73CBBA279E9DF9B /* CleanupServiceDryRunTests.swift in Sources */,
 				0F302CFDC426866EDD7CEAD0 /* DashboardViewModelTests.swift in Sources */,
+				1DB3C40705D4F178AEE3285E /* LocalDeletionAuditLoggerTests.swift in Sources */,
+				09C682737D45B84930B2A892 /* ProtectedFolderPolicyTests.swift in Sources */,
+				5A30D8445D102BE86F87E075 /* ScopedFolderAnalyzerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
