@@ -52,6 +52,17 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("App Icon Concept") {
+                    HStack {
+                        Spacer()
+                        AppIconPreview()
+                        Spacer()
+                    }
+                    Text("Minimal flat concept: shield + sparkle, optimized for readability.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("Data Management") {
                     Button("Clear Saved Folder Access", role: .destructive) {
                         showClearFoldersConfirmation = true

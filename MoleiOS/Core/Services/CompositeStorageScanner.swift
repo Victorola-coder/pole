@@ -33,4 +33,9 @@ struct CompositeStorageScanner: StorageScanning {
 
         return candidates.sorted { $0.sizeBytes > $1.sizeBytes }
     }
+
+    func scanFolderAnalysis() async throws -> [FolderAnalysisNode] {
+        let localFileScanner = LocalFileScanner(additionalDirectories: folderStore.scopedFolders())
+        return await localFileScanner.scanFolderAnalysis()
+    }
 }

@@ -12,9 +12,11 @@ struct LocalFileScanner {
     }
 
     func scanInsights() async -> [StorageInsight] {
-        let bytes = directories.reduce(Int64(0)) { partialResult, directory in
-            partialResult + recursiveDirectoryBytes(at: directory)
-        }
+        let bytes = await Task.detached(priority: .utility) {
+            directories.reduce(Int64(0)) { partialResult, directory in
+                partialResult + recursiveDirectoryBytes(at: directory)
+            }
+        }.value
 
         return [
             StorageInsight(
@@ -26,15 +28,31 @@ struct LocalFileScanner {
     }
 
     func scanCandidates(limit: Int = 50) async -> [CleanupCandidate] {
-        var candidates: [CleanupCandidate] = []
-        for directory in directories {
-            candidates.append(contentsOf: fileCandidates(in: directory))
-        }
+        let candidates: [CleanupCandidate] = await Task.detached(priority: .utility) {
+            var collected: [CleanupCandidate] = []
+            for directory in directories {
+                collected.append(contentsOf: fileCandidates(in: directory))
+            }
+            return collected
+        }.value
 
         return candidates
             .sorted { $0.sizeBytes > $1.sizeBytes }
             .prefix(limit)
             .map { $0 }
+    }
+
+    func scanFolderAnalysis(maxDepth: Int = 2, maxChildrenPerNode: Int = 8) async -> [FolderAnalysisNode] {
+        await Task.detached(priority: .utility) {
+            directories.map { root in
+                buildFolderNode(
+                    at: root,
+                    currentDepth: 0,
+                    maxDepth: maxDepth,
+                    maxChildrenPerNode: maxChildrenPerNode
+                )
+            }
+        }.value
     }
 
     private func recursiveDirectoryBytes(at root: URL) -> Int64 {
@@ -79,13 +97,61 @@ struct LocalFileScanner {
                     displayName: url.lastPathComponent,
                     sizeBytes: Int64(size),
                     createdAt: values.creationDate,
-                    detailText: root.path,
+                    detailText: url.deletingLastPathComponent().path,
                     photoAssetLocalIdentifier: nil,
                     fileURL: url
                 )
             )
         }
         return items
+    }
+
+    private func buildFolderNode(
+        at url: URL,
+        currentDepth: Int,
+        maxDepth: Int,
+        maxChildrenPerNode: Int
+    ) -> FolderAnalysisNode {
+        var children: [FolderAnalysisNode] = []
+        if currentDepth < maxDepth {
+            let childDirectories = immediateSubdirectories(of: url)
+            children = childDirectories.map {
+                buildFolderNode(
+                    at: $0,
+                    currentDepth: currentDepth + 1,
+                    maxDepth: maxDepth,
+                    maxChildrenPerNode: maxChildrenPerNode
+                )
+            }
+            .sorted { $0.totalBytes > $1.totalBytes }
+            .prefix(maxChildrenPerNode)
+            .map { $0 }
+        }
+
+        let ownBytes = recursiveDirectoryBytes(at: url)
+        return FolderAnalysisNode(
+            name: url.lastPathComponent,
+            path: url.path,
+            totalBytes: ownBytes,
+            children: children
+        )
+    }
+
+    private func immediateSubdirectories(of root: URL) -> [URL] {
+        let keys: Set<URLResourceKey> = [.isDirectoryKey, .isHiddenKey]
+        guard let urls = try? FileManager.default.contentsOfDirectory(
+            at: root,
+            includingPropertiesForKeys: Array(keys),
+            options: [.skipsPackageDescendants, .skipsHiddenFiles]
+        ) else {
+            return []
+        }
+        return urls.filter { url in
+            guard let values = try? url.resourceValues(forKeys: keys) else {
+                return false
+            }
+            return values.isDirectory == true && values.isHidden != true
+        }
     }
 
     private func bytesToGigabytes(_ bytes: Int64) -> Double {
