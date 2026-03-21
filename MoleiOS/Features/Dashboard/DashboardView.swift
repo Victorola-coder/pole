@@ -171,7 +171,7 @@ struct DashboardView: View {
             .alert("Final Confirmation", isPresented: $showStrictConfirmation, presenting: pendingStrictCandidate) { item in
                 Button("Delete \(item.displayName)", role: .destructive) {
                     Task {
-                        await viewModel.delete(candidate: item)
+                        await viewModel.delete(candidate: item, options: DeletionOptions(dryRun: appState.dryRunDeletionEnabled))
                     }
                     pendingStrictCandidate = nil
                 }
@@ -204,7 +204,7 @@ struct DashboardView: View {
             return
         }
 
-        await viewModel.delete(candidate: item)
+        await viewModel.delete(candidate: item, options: DeletionOptions(dryRun: appState.dryRunDeletionEnabled))
     }
 
     private func authenticateBiometrically() async -> Bool {

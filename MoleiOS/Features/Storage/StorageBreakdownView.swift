@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 struct StorageBreakdownView: View {
     @ObservedObject var viewModel: DashboardViewModel
     @State private var isFolderPickerPresented = false
+    @State private var isProtectedFolderPickerPresented = false
 
     var body: some View {
         NavigationStack {
@@ -38,6 +39,43 @@ struct StorageBreakdownView: View {
                         }
                     }
                 }
+
+                Section("Protected Folders") {
+                    Button("Add Protected Folder") {
+                        isProtectedFolderPickerPresented = true
+                    }
+                    if viewModel.protectedFolderNames.isEmpty {
+                        Text("No protected folders configured.")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(viewModel.protectedFolderNames, id: \.self) { name in
+                            HStack {
+                                Text(name)
+                                Spacer()
+                                Button("Remove", role: .destructive) {
+                                    viewModel.removeProtectedFolder(named: name)
+                                }
+                                .buttonStyle(.borderless)
+                            }
+                        }
+                    }
+                }
+
+                Section("Folder Analyzer") {
+                    if viewModel.folderAnalysis.isEmpty {
+                        Text("No folder analysis yet. Run a scan to populate this view.")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        OutlineGroup(viewModel.folderAnalysis, children: \.children) { node in
+                            HStack {
+                                Text(node.name)
+                                Spacer()
+                                Text(node.sizeLabel)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
             }
             .navigationTitle("Storage")
             .fileImporter(
@@ -48,6 +86,19 @@ struct StorageBreakdownView: View {
                 case .success(let url):
                     Task {
                         await viewModel.addScopedFolder(url: url)
+                    }
+                case .failure:
+                    viewModel.importFolderFailed()
+                }
+            }
+            .fileImporter(
+                isPresented: $isProtectedFolderPickerPresented,
+                allowedContentTypes: [.folder]
+            ) { result in
+                switch result {
+                case .success(let url):
+                    Task {
+                        await viewModel.addProtectedFolder(url: url)
                     }
                 case .failure:
                     viewModel.importFolderFailed()

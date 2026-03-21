@@ -37,6 +37,7 @@ struct SettingsView: View {
                 Section("Cleanup Safety") {
                     Toggle("Use Face ID / Touch ID", isOn: $appState.shouldUseBiometricLock)
                     Toggle("Strict Double Confirmation", isOn: $appState.strictDeleteConfirmation)
+                    Toggle("Dry Run Deletions", isOn: $appState.dryRunDeletionEnabled)
                 }
 
                 Section("Appearance") {

@@ -1,6 +1,6 @@
 import Foundation
 
-enum CleanupSource: String, CaseIterable, Identifiable {
+enum CleanupSource: String, CaseIterable, Identifiable, Codable {
     case photos
     case files
 

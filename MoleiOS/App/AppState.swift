@@ -20,6 +20,9 @@ final class AppState: ObservableObject {
     @Published var strictDeleteConfirmation: Bool {
         didSet { defaults.set(strictDeleteConfirmation, forKey: Keys.strictDeleteConfirmation) }
     }
+    @Published var dryRunDeletionEnabled: Bool {
+        didSet { defaults.set(dryRunDeletionEnabled, forKey: Keys.dryRunDeletionEnabled) }
+    }
     @Published var appearance: AppearanceOption {
         didSet { defaults.set(appearance.rawValue, forKey: Keys.appearance) }
     }
@@ -40,6 +43,7 @@ final class AppState: ObservableObject {
         self.minimumCandidateSizeMB = max(1, defaults.double(forKey: Keys.minimumCandidateSizeMB))
         self.includeVideosInScan = defaults.object(forKey: Keys.includeVideosInScan) as? Bool ?? true
         self.strictDeleteConfirmation = defaults.object(forKey: Keys.strictDeleteConfirmation) as? Bool ?? false
+        self.dryRunDeletionEnabled = defaults.object(forKey: Keys.dryRunDeletionEnabled) as? Bool ?? false
         self.appearance = AppearanceOption(rawValue: defaults.string(forKey: Keys.appearance) ?? "") ?? .system
         self.accent = AccentOption(rawValue: defaults.string(forKey: Keys.accent) ?? "") ?? .green
     }
@@ -73,6 +77,7 @@ private enum Keys {
     static let minimumCandidateSizeMB = "settings.minimumCandidateSizeMB"
     static let includeVideosInScan = "settings.includeVideosInScan"
     static let strictDeleteConfirmation = "settings.strictDeleteConfirmation"
+    static let dryRunDeletionEnabled = "settings.dryRunDeletionEnabled"
     static let appearance = "settings.appearance"
     static let accent = "settings.accent"
 }

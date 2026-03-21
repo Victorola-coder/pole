@@ -10,6 +10,8 @@ final class DashboardViewModel: ObservableObject {
     @Published private(set) var errorMessage: String?
     @Published private(set) var canScanPhotos = false
     @Published private(set) var scopedFolderNames: [String] = []
+    @Published private(set) var protectedFolderNames: [String] = []
+    @Published private(set) var folderAnalysis: [FolderAnalysisNode] = []
 
     private let scanner: StorageScanning
     private let cleanupService: CleanupServicing
@@ -29,6 +31,7 @@ final class DashboardViewModel: ObservableObject {
         self.scopedFolderStore = scopedFolderStore
         self.canScanPhotos = permissionService.canScanPhotos
         self.scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
+        self.protectedFolderNames = scopedFolderStore.protectedFolders().map(\.lastPathComponent)
     }
 
     var totalUsed: Double {
@@ -45,6 +48,7 @@ final class DashboardViewModel: ObservableObject {
 
     func syncScopedFolders() {
         scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
+        protectedFolderNames = scopedFolderStore.protectedFolders().map(\.lastPathComponent)
     }
 
     func load() async {
@@ -79,6 +83,9 @@ final class DashboardViewModel: ObservableObject {
                 candidates = try await scanner.scanCandidates()
                 try Task.checkCancellation()
                 scanProgress = 1
+
+                scanStatusText = "Building folder analysis..."
+                folderAnalysis = try await scanner.scanFolderAnalysis()
             } catch is CancellationError {
                 scanStatusText = "Scan cancelled"
             } catch {
@@ -118,10 +125,13 @@ final class DashboardViewModel: ObservableObject {
         await load()
     }
 
-    func delete(candidate: CleanupCandidate) async {
+    func delete(candidate: CleanupCandidate, options: DeletionOptions) async {
         isLoading = true
         do {
-            try await cleanupService.delete(candidate: candidate)
+            try await cleanupService.delete(candidate: candidate, options: options)
+            if options.dryRun {
+                errorMessage = "Dry run completed. No data was deleted."
+            }
             await load()
         } catch {
             errorMessage = (error as? LocalizedError)?.errorDescription ?? "Delete failed. Please try again."
@@ -137,5 +147,22 @@ final class DashboardViewModel: ObservableObject {
         } catch {
             errorMessage = (error as? LocalizedError)?.errorDescription ?? "Could not add folder access."
         }
+    }
+
+    func addProtectedFolder(url: URL) async {
+        do {
+            try scopedFolderStore.addProtectedFolder(url)
+            syncScopedFolders()
+        } catch {
+            errorMessage = (error as? LocalizedError)?.errorDescription ?? "Could not add protected folder."
+        }
+    }
+
+    func removeProtectedFolder(named folderName: String) {
+        guard let url = scopedFolderStore.protectedFolders().first(where: { $0.lastPathComponent == folderName }) else {
+            return
+        }
+        scopedFolderStore.removeProtectedFolder(url)
+        syncScopedFolders()
     }
 }

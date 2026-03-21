@@ -7,13 +7,14 @@ struct PoleApp: App {
 
     init() {
         let folderStore = ScopedFolderStore()
+        let auditLogger = LocalDeletionAuditLogger()
         _appState = StateObject(
             wrappedValue: AppState(folderStore: folderStore)
         )
         _dashboardViewModel = StateObject(
             wrappedValue: DashboardViewModel(
                 scanner: CompositeStorageScanner(folderStore: folderStore),
-                cleanupService: CleanupService(),
+                cleanupService: CleanupService(folderStore: folderStore, auditLogger: auditLogger),
                 permissionService: PermissionService(),
                 scopedFolderStore: folderStore
             )
