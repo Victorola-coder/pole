@@ -28,3 +28,9 @@ SwiftUI starter codebase for an iOS-first "Mole-like" cleanup assistant.
 ## Notes
 
 This codebase intentionally uses mock scanning data first so product flows can be built safely before wiring real Apple framework integrations like PhotoKit and FileProvider.
+
+## Production docs
+
+- `PRIVACY.md`
+- `TELEMETRY.md`
+- `TESTFLIGHT_CHECKLIST.md`

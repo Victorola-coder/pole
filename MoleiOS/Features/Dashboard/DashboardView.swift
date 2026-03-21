@@ -7,6 +7,7 @@ struct DashboardView: View {
     @State private var pendingDeleteCandidate: CleanupCandidate?
     @State private var pendingStrictCandidate: CleanupCandidate?
     @State private var showStrictConfirmation = false
+    @State private var showCancelScanConfirmation = false
     @State private var showAuthError = false
     @State private var authErrorMessage = ""
 
@@ -24,8 +25,11 @@ struct DashboardView: View {
                         Text(viewModel.scanStatusText)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
+                        Text("\(Int((viewModel.scanProgress * 100).rounded()))%")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                         Button("Cancel Scan", role: .cancel) {
-                            viewModel.cancelScan()
+                            showCancelScanConfirmation = true
                         }
                     }
                     .padding()
@@ -167,6 +171,14 @@ struct DashboardView: View {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text(authErrorMessage)
+            }
+            .alert("Cancel current scan?", isPresented: $showCancelScanConfirmation) {
+                Button("Keep Scanning", role: .cancel) {}
+                Button("Cancel Scan", role: .destructive) {
+                    viewModel.cancelScan()
+                }
+            } message: {
+                Text("The current scan will stop and partial progress will be discarded.")
             }
             .alert("Final Confirmation", isPresented: $showStrictConfirmation, presenting: pendingStrictCandidate) { item in
                 Button("Delete \(item.displayName)", role: .destructive) {

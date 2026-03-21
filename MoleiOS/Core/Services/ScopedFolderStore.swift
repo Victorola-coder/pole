@@ -12,11 +12,14 @@ protocol ScopedFolderStoring {
 
 enum ScopedFolderStoreError: LocalizedError {
     case duplicateFolder
+    case permissionDenied
 
     var errorDescription: String? {
         switch self {
         case .duplicateFolder:
             return "That folder has already been added."
+        case .permissionDenied:
+            return "Could not access this folder. Please pick it again from Files."
         }
     }
 }
@@ -47,6 +50,16 @@ final class ScopedFolderStore: ScopedFolderStoring {
             throw ScopedFolderStoreError.duplicateFolder
         }
 
+        let didAccess = url.startAccessingSecurityScopedResource()
+        defer {
+            if didAccess {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+        guard didAccess else {
+            throw ScopedFolderStoreError.permissionDenied
+        }
+
         let bookmarkData = try url.bookmarkData()
         var allBookmarks = userDefaults.array(forKey: bookmarkKey) as? [Data] ?? []
         allBookmarks.append(bookmarkData)
@@ -57,6 +70,16 @@ final class ScopedFolderStore: ScopedFolderStoring {
     func addProtectedFolder(_ url: URL) throws {
         if containsURL(url, in: cachedProtectedURLs) {
             throw ScopedFolderStoreError.duplicateFolder
+        }
+
+        let didAccess = url.startAccessingSecurityScopedResource()
+        defer {
+            if didAccess {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+        guard didAccess else {
+            throw ScopedFolderStoreError.permissionDenied
         }
 
         let bookmarkData = try url.bookmarkData()

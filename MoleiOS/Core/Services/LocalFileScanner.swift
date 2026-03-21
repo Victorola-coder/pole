@@ -4,11 +4,18 @@ struct LocalFileScanner {
     private let directories: [URL]
 
     init(additionalDirectories: [URL], fileManager: FileManager = .default) {
-        self.directories = [
+        let appManagedDirectories = [
             fileManager.urls(for: .documentDirectory, in: .userDomainMask).first,
-            fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
+            fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first,
+            fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first,
+            fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first,
+            URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
         ]
-        .compactMap { $0 } + additionalDirectories
+            .compactMap { $0 }
+        let merged = appManagedDirectories + additionalDirectories
+        self.directories = Array(
+            Dictionary(grouping: merged, by: { $0.standardizedFileURL.path }).values.compactMap { $0.first }
+        )
     }
 
     func scanInsights() async throws -> [StorageInsight] {

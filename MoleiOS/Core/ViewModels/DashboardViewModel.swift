@@ -74,18 +74,30 @@ final class DashboardViewModel: ObservableObject {
             }
 
             do {
-                scanStatusText = "Scanning storage categories..."
-                insights = try await scanner.scan()
-                try Task.checkCancellation()
-                scanProgress = 0.5
+                if let compositeScanner = scanner as? CompositeStorageScanner {
+                    let result = try await compositeScanner.scanAll { value, status in
+                        await MainActor.run {
+                            self.scanProgress = value
+                            self.scanStatusText = status
+                        }
+                    }
+                    insights = result.insights
+                    candidates = result.candidates
+                    folderAnalysis = result.folderAnalysis
+                } else {
+                    scanStatusText = "Scanning storage categories (1/3)..."
+                    insights = try await scanner.scan()
+                    try Task.checkCancellation()
+                    scanProgress = 0.34
 
-                scanStatusText = "Collecting cleanup candidates..."
-                candidates = try await scanner.scanCandidates()
-                try Task.checkCancellation()
-                scanProgress = 1
+                    scanStatusText = "Collecting cleanup candidates (2/3)..."
+                    candidates = try await scanner.scanCandidates()
+                    try Task.checkCancellation()
+                    scanProgress = 0.67
 
-                scanStatusText = "Building folder analysis..."
-                folderAnalysis = try await scanner.scanFolderAnalysis()
+                    scanStatusText = "Building folder analysis (3/3)..."
+                    folderAnalysis = try await scanner.scanFolderAnalysis()
+                }
             } catch is CancellationError {
                 scanStatusText = "Scan cancelled"
             } catch {
