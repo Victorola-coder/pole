@@ -83,7 +83,7 @@
 		CC05156DB8C1D5C7AEAC5565 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		D3AAC026AB3F8A2EDB2E69D5 /* CleanupCandidateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidateTests.swift; sourceTree = "<group>"; };
 		E4D38982AC5A5855A82CCEC2 /* CompositeStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeStorageScanner.swift; sourceTree = "<group>"; };
-		E74270C1A63F8C0D4EAF9921 /* Pole.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pole.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E74270C1A63F8C0D4EAF9921 /* Pole.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pole.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8735156F720E5BDA342E367 /* StorageInsight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageInsight.swift; sourceTree = "<group>"; };
 		E90B872D58AB2D97B1874FF9 /* LocalDeletionAuditLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDeletionAuditLoggerTests.swift; sourceTree = "<group>"; };
 		E9417032ED746FB6F865006B /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
@@ -283,8 +283,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = DA1333C1B769F3E2BBEC76EB /* Build configuration list for PBXProject "Pole" */;
 			developmentRegion = en;
@@ -533,6 +531,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4993QHNG7K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Pole;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Pole scans photos and videos to show storage usage and cleanup opportunities.";
@@ -554,6 +553,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4993QHNG7K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Pole;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Pole scans photos and videos to show storage usage and cleanup opportunities.";
