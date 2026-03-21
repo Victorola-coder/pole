@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct StorageBreakdownView: View {
-    private let insights = StorageInsight.mockData
+    @ObservedObject var viewModel: DashboardViewModel
 
     var body: some View {
         NavigationStack {
-            List(insights) { insight in
+            List(viewModel.insights) { insight in
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(insight.category)
@@ -20,6 +20,11 @@ struct StorageBreakdownView: View {
                 .padding(.vertical, 4)
             }
             .navigationTitle("Storage")
+            .task {
+                if viewModel.insights.isEmpty {
+                    await viewModel.load()
+                }
+            }
         }
     }
 }

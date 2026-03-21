@@ -2,11 +2,31 @@ import Foundation
 
 protocol StorageScanning {
     func scan() async throws -> [StorageInsight]
+    func scanCandidates() async throws -> [CleanupCandidate]
 }
 
 struct MockStorageScanner: StorageScanning {
     func scan() async throws -> [StorageInsight] {
         try await Task.sleep(for: .milliseconds(450))
         return StorageInsight.mockData
+    }
+
+    func scanCandidates() async throws -> [CleanupCandidate] {
+        [
+            CleanupCandidate(
+                source: .photos,
+                displayName: "Large video sample",
+                sizeBytes: 750 * 1_024 * 1_024,
+                photoAssetLocalIdentifier: nil,
+                fileURL: nil
+            ),
+            CleanupCandidate(
+                source: .files,
+                displayName: "Unused download",
+                sizeBytes: 120 * 1_024 * 1_024,
+                photoAssetLocalIdentifier: nil,
+                fileURL: nil
+            )
+        ]
     }
 }

@@ -3,16 +3,21 @@ import SwiftUI
 @main
 struct PoleApp: App {
     @StateObject private var appState = AppState()
+    @StateObject private var dashboardViewModel = DashboardViewModel(
+        scanner: CompositeStorageScanner(),
+        cleanupService: CleanupService(),
+        permissionService: PermissionService()
+    )
 
     var body: some Scene {
         WindowGroup {
             TabView {
-                DashboardView(viewModel: DashboardViewModel(scanner: MockStorageScanner()))
+                DashboardView(viewModel: dashboardViewModel)
                     .tabItem {
                         Label("Dashboard", systemImage: "gauge.with.dots.needle")
                     }
 
-                StorageBreakdownView()
+                StorageBreakdownView(viewModel: dashboardViewModel)
                     .tabItem {
                         Label("Storage", systemImage: "internaldrive")
                     }

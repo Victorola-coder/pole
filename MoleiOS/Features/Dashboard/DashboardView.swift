@@ -16,6 +16,17 @@ struct DashboardView: View {
                     ContentUnavailableView("Scan failed", systemImage: "exclamationmark.triangle", description: Text(errorMessage))
                 } else {
                     List {
+                        if !viewModel.canScanPhotos {
+                            Section("Permissions") {
+                                Button("Allow Photo Access") {
+                                    Task {
+                                        await viewModel.requestPhotoAccess()
+                                        await viewModel.load()
+                                    }
+                                }
+                            }
+                        }
+
                         Section("Overview") {
                             statRow(title: "Used Storage", value: String(format: "%.1f GB", viewModel.totalUsed))
                             statRow(title: "Potential Savings", value: String(format: "%.1f GB", viewModel.totalRecoverable))
@@ -31,6 +42,33 @@ struct DashboardView: View {
                                         .foregroundStyle(.secondary)
                                 }
                                 .padding(.vertical, 2)
+                            }
+                        }
+
+                        Section("Cleanup Candidates") {
+                            if viewModel.candidates.isEmpty {
+                                Text("No candidates found.")
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                ForEach(viewModel.candidates.prefix(20)) { item in
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(item.displayName)
+                                            Text(item.source.rawValue.capitalized)
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+                                        Text(String(format: "%.2f GB", item.sizeGigabytes))
+                                            .font(.footnote)
+                                        Button("Delete", role: .destructive) {
+                                            Task {
+                                                await viewModel.delete(candidate: item)
+                                            }
+                                        }
+                                        .buttonStyle(.borderless)
+                                    }
+                                }
                             }
                         }
                     }
