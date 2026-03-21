@@ -5,6 +5,7 @@ import UIKit
 struct SettingsView: View {
     @ObservedObject var appState: AppState
     @State private var photoPermissionStatus: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+    @State private var showClearFoldersConfirmation = false
 
     var body: some View {
         NavigationStack {
@@ -53,7 +54,7 @@ struct SettingsView: View {
 
                 Section("Data Management") {
                     Button("Clear Saved Folder Access", role: .destructive) {
-                        appState.clearSavedFolders()
+                        showClearFoldersConfirmation = true
                     }
                 }
 
@@ -64,6 +65,14 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .task {
                 photoPermissionStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            }
+            .alert("Clear saved folder access?", isPresented: $showClearFoldersConfirmation) {
+                Button("Clear", role: .destructive) {
+                    appState.clearSavedFolders()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This removes all previously granted Files folders from the app.")
             }
         }
     }
