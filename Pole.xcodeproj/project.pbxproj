@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F302CFDC426866EDD7CEAD0 /* DashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D173B73A5DE646CEF7CAE /* DashboardViewModelTests.swift */; };
 		1B4BE97544B693BAF771B14A /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87A905B7C496F78C586CD9 /* DashboardView.swift */; };
 		1C2CFF1C3C3B11E6F12D0B74 /* CleanupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DCAB56D7647AC872006EC /* CleanupService.swift */; };
 		2C0A814FEFFE550357AC68C9 /* MoleiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */; };
@@ -14,6 +15,7 @@
 		428D1AA52999E72BBBDB9B94 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */; };
 		4C813EE6E616BA82996EE6FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC05156DB8C1D5C7AEAC5565 /* AppState.swift */; };
 		51D106C3CF98EDB0298A20A5 /* PermissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F53C5A25D68303712BDE9 /* PermissionService.swift */; };
+		523B65FB5D6CF131CE3A67B8 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9417032ED746FB6F865006B /* AppStateTests.swift */; };
 		76FFA07ED65E43C8DCB7D9C2 /* MockStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06914BB3990184C4532AB80B /* MockStorageScanner.swift */; };
 		8B87179EAAED9C2962F5EF51 /* CleanupCandidatePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */; };
 		988134C2EDFA5E50316529F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3716EF9626CB62AAB9366213 /* SettingsView.swift */; };
@@ -23,8 +25,19 @@
 		C4906F20D6A928AC4E00E152 /* PhotoLibraryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */; };
 		D34F26ECAE7F34BF4F3E404E /* StorageBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */; };
 		E8D64963CF94E59F4D2CA0FB /* StorageInsight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8735156F720E5BDA342E367 /* StorageInsight.swift */; };
+		EF85CEED5BA508407D5641FB /* CleanupCandidateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AAC026AB3F8A2EDB2E69D5 /* CleanupCandidateTests.swift */; };
 		FF3464DDAAE7BA62230E87C8 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD5C201901C0EC0E017A56C /* AppPreferences.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		260A618B70BFBD03CF1BAAA6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EFA2BF0B0CDBA937139E0820 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AFB11BABC2B99D460E0335C1;
+			remoteInfo = Pole;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		06914BB3990184C4532AB80B /* MockStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStorageScanner.swift; sourceTree = "<group>"; };
@@ -34,16 +47,20 @@
 		3716EF9626CB62AAB9366213 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3F51E7C121E7376F4998A7C4 /* CleanupCandidatePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidatePreview.swift; sourceTree = "<group>"; };
 		41CEC14E9B85228FD0117C42 /* MoleiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoleiOSApp.swift; sourceTree = "<group>"; };
+		4C9D173B73A5DE646CEF7CAE /* DashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModelTests.swift; sourceTree = "<group>"; };
 		4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		4E87A905B7C496F78C586CD9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		87E10DA68ADDE538171B4665 /* LocalFileScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileScanner.swift; sourceTree = "<group>"; };
+		9009A358D32555927F13DEC3 /* PoleTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PoleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DFE317AEF6607511BAD290 /* ScopedFolderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopedFolderStore.swift; sourceTree = "<group>"; };
 		AA5DCAB56D7647AC872006EC /* CleanupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupService.swift; sourceTree = "<group>"; };
 		BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageBreakdownView.swift; sourceTree = "<group>"; };
 		CC05156DB8C1D5C7AEAC5565 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		D3AAC026AB3F8A2EDB2E69D5 /* CleanupCandidateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupCandidateTests.swift; sourceTree = "<group>"; };
 		E4D38982AC5A5855A82CCEC2 /* CompositeStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeStorageScanner.swift; sourceTree = "<group>"; };
 		E74270C1A63F8C0D4EAF9921 /* Pole.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pole.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8735156F720E5BDA342E367 /* StorageInsight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageInsight.swift; sourceTree = "<group>"; };
+		E9417032ED746FB6F865006B /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		F23F53C5A25D68303712BDE9 /* PermissionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,8 +69,19 @@
 			isa = PBXGroup;
 			children = (
 				E74270C1A63F8C0D4EAF9921 /* Pole.app */,
+				9009A358D32555927F13DEC3 /* PoleTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4A4D5B1F5873F79EA4DB6B88 /* PoleTests */ = {
+			isa = PBXGroup;
+			children = (
+				E9417032ED746FB6F865006B /* AppStateTests.swift */,
+				D3AAC026AB3F8A2EDB2E69D5 /* CleanupCandidateTests.swift */,
+				4C9D173B73A5DE646CEF7CAE /* DashboardViewModelTests.swift */,
+			);
+			path = PoleTests;
 			sourceTree = "<group>";
 		};
 		5505215A8E828B1F6CF86611 /* Features */ = {
@@ -147,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				5753607A265088834C4306AF /* MoleiOS */,
+				4A4D5B1F5873F79EA4DB6B88 /* PoleTests */,
 				0FF27800084E8108C6A410DD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -163,6 +192,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		86217AA349372A332C8C13BF /* PoleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9AB9746DD2FFC1D038FEB99 /* Build configuration list for PBXNativeTarget "PoleTests" */;
+			buildPhases = (
+				25EC4C2E211EF9CEE17F7C7A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				70E63CC26E12466BE82D0E89 /* PBXTargetDependency */,
+			);
+			name = PoleTests;
+			packageProductDependencies = (
+			);
+			productName = PoleTests;
+			productReference = 9009A358D32555927F13DEC3 /* PoleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		AFB11BABC2B99D460E0335C1 /* Pole */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72BEAFB0EB655CDA5C5FDFA9 /* Build configuration list for PBXNativeTarget "Pole" */;
@@ -206,11 +253,22 @@
 			projectRoot = "";
 			targets = (
 				AFB11BABC2B99D460E0335C1 /* Pole */,
+				86217AA349372A332C8C13BF /* PoleTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		25EC4C2E211EF9CEE17F7C7A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				523B65FB5D6CF131CE3A67B8 /* AppStateTests.swift in Sources */,
+				EF85CEED5BA508407D5641FB /* CleanupCandidateTests.swift in Sources */,
+				0F302CFDC426866EDD7CEAD0 /* DashboardViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		87FE80675CF04C97DE13E8BF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -237,7 +295,30 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		70E63CC26E12466BE82D0E89 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AFB11BABC2B99D460E0335C1 /* Pole */;
+			targetProxy = 260A618B70BFBD03CF1BAAA6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		28A5561C8077A891227E0A16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pole.app/Pole";
+			};
+			name = Debug;
+		};
 		67F6DB1DDFE90CE0F06F7DB8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -359,6 +440,21 @@
 			};
 			name = Debug;
 		};
+		D0A11D6A70D9DA5C8408B50A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pole.app/Pole";
+			};
+			name = Release;
+		};
 		E4EB9DDB27AE720F53C8A178 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -409,6 +505,15 @@
 			buildConfigurations = (
 				F2563EE22CA70E19CB79799C /* Debug */,
 				E4EB9DDB27AE720F53C8A178 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C9AB9746DD2FFC1D038FEB99 /* Build configuration list for PBXNativeTarget "PoleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28A5561C8077A891227E0A16 /* Debug */,
+				D0A11D6A70D9DA5C8408B50A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

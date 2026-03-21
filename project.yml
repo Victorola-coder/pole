@@ -22,4 +22,15 @@ targets:
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
     scheme:
-      testTargets: []
+      testTargets:
+        - PoleTests
+  PoleTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - PoleTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: Pole
