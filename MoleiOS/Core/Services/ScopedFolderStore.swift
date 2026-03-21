@@ -47,7 +47,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
             throw ScopedFolderStoreError.duplicateFolder
         }
 
-        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+        let bookmarkData = try url.bookmarkData()
         var allBookmarks = userDefaults.array(forKey: bookmarkKey) as? [Data] ?? []
         allBookmarks.append(bookmarkData)
         userDefaults.set(allBookmarks, forKey: bookmarkKey)
@@ -59,7 +59,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
             throw ScopedFolderStoreError.duplicateFolder
         }
 
-        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+        let bookmarkData = try url.bookmarkData()
         var allBookmarks = userDefaults.array(forKey: protectedBookmarkKey) as? [Data] ?? []
         allBookmarks.append(bookmarkData)
         userDefaults.set(allBookmarks, forKey: protectedBookmarkKey)
@@ -72,7 +72,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
             var isStale = false
             guard let resolved = try? URL(
                 resolvingBookmarkData: bookmark,
-                options: [.withSecurityScope],
+                options: [],
                 relativeTo: nil,
                 bookmarkDataIsStale: &isStale
             ) else {
@@ -109,7 +109,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
             var isStale = false
             guard let url = try? URL(
                 resolvingBookmarkData: bookmark,
-                options: [.withSecurityScope],
+                options: [],
                 relativeTo: nil,
                 bookmarkDataIsStale: &isStale
             )
@@ -121,7 +121,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
             urls.append(url)
 
             if isStale {
-                if let freshBookmark = try? url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil) {
+                if let freshBookmark = try? url.bookmarkData() {
                     refreshedBookmarks.append(freshBookmark)
                 }
             } else {

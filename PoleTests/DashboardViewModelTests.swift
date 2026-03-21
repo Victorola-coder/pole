@@ -53,6 +53,10 @@ private struct MockScanner: StorageScanning {
             )
         ]
     }
+
+    func scanFolderAnalysis() async throws -> [FolderAnalysisNode] {
+        []
+    }
 }
 
 private struct FailingScanner: StorageScanning {
@@ -63,10 +67,11 @@ private struct FailingScanner: StorageScanning {
 
     func scan() async throws -> [StorageInsight] { throw ScanError.failed }
     func scanCandidates() async throws -> [CleanupCandidate] { [] }
+    func scanFolderAnalysis() async throws -> [FolderAnalysisNode] { [] }
 }
 
 private struct MockCleanupService: CleanupServicing {
-    func delete(candidate: CleanupCandidate) async throws {}
+    func delete(candidate: CleanupCandidate, options: DeletionOptions) async throws {}
 }
 
 private struct MockPermissionService: PermissionServicing {
@@ -76,6 +81,10 @@ private struct MockPermissionService: PermissionServicing {
 
 private struct MockScopedFolderStore: ScopedFolderStoring {
     func scopedFolders() -> [URL] { [] }
+    func protectedFolders() -> [URL] { [] }
     func addFolder(_ url: URL) throws {}
+    func addProtectedFolder(_ url: URL) throws {}
+    func removeProtectedFolder(_ url: URL) {}
     func clearFolders() {}
+    func clearProtectedFolders() {}
 }

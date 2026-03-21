@@ -10,4 +10,8 @@ struct FolderAnalysisNode: Identifiable, Hashable {
     var sizeLabel: String {
         ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
     }
+
+    var expandableChildren: [FolderAnalysisNode]? {
+        children.isEmpty ? nil : children
+    }
 }

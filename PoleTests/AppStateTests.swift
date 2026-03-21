@@ -12,6 +12,7 @@ final class AppStateTests: XCTestCase {
         state?.minimumCandidateSizeMB = 256
         state?.includeVideosInScan = false
         state?.strictDeleteConfirmation = true
+        state?.dryRunDeletionEnabled = true
         state?.appearance = .dark
         state?.accent = .orange
         state = nil
@@ -21,6 +22,7 @@ final class AppStateTests: XCTestCase {
         XCTAssertEqual(reloaded.minimumCandidateSizeMB, 256)
         XCTAssertFalse(reloaded.includeVideosInScan)
         XCTAssertTrue(reloaded.strictDeleteConfirmation)
+        XCTAssertTrue(reloaded.dryRunDeletionEnabled)
         XCTAssertEqual(reloaded.appearance, .dark)
         XCTAssertEqual(reloaded.accent, .orange)
     }
@@ -28,6 +30,10 @@ final class AppStateTests: XCTestCase {
 
 private final class MockScopedFolderStore: ScopedFolderStoring {
     func scopedFolders() -> [URL] { [] }
+    func protectedFolders() -> [URL] { [] }
     func addFolder(_ url: URL) throws {}
+    func addProtectedFolder(_ url: URL) throws {}
+    func removeProtectedFolder(_ url: URL) {}
     func clearFolders() {}
+    func clearProtectedFolders() {}
 }

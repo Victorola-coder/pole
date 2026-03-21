@@ -66,7 +66,7 @@ struct StorageBreakdownView: View {
                         Text("No folder analysis yet. Run a scan to populate this view.")
                             .foregroundStyle(.secondary)
                     } else {
-                        OutlineGroup(viewModel.folderAnalysis, children: \.children) { node in
+                        OutlineGroup(viewModel.folderAnalysis, children: \.expandableChildren) { node in
                             HStack {
                                 Text(node.name)
                                 Spacer()
