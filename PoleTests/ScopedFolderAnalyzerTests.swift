@@ -11,7 +11,7 @@ final class ScopedFolderAnalyzerTests: XCTestCase {
         try Data(repeating: 1, count: 4096).write(to: file)
 
         let scanner = LocalFileScanner(additionalDirectories: [root])
-        let analysis = await scanner.scanFolderAnalysis(maxDepth: 2, maxChildrenPerNode: 5)
+        let analysis = try await scanner.scanFolderAnalysis(maxDepth: 2, maxChildrenPerNode: 5)
         let rootNode = analysis.first(where: { $0.path == root.path })
 
         XCTAssertNotNil(rootNode)
