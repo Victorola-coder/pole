@@ -5,7 +5,14 @@ import UIKit
 struct PhotoLibraryScanner {
     func scanInsights() async -> [StorageInsight] {
         let imageAssets = PHAsset.fetchAssets(with: .image, options: nil)
-        let videoAssets = PHAsset.fetchAssets(with: .video, options: nil)
+        let videoAssets: PHFetchResult<PHAsset>
+        if AppPreferences.includeVideosInScan {
+            videoAssets = PHAsset.fetchAssets(with: .video, options: nil)
+        } else {
+            let options = PHFetchOptions()
+            options.predicate = NSPredicate(value: false)
+            videoAssets = PHAsset.fetchAssets(with: options)
+        }
 
         let imageBytes = totalBytes(for: imageAssets)
         let videoBytes = totalBytes(for: videoAssets)
@@ -31,7 +38,12 @@ struct PhotoLibraryScanner {
 
         var allCandidates: [CleanupCandidate] = []
         assets.enumerateObjects { asset, _, _ in
-            guard let bytes = estimatedSizeBytes(for: asset), bytes > 20 * 1_024 * 1_024 else {
+            if asset.mediaType == .video && !AppPreferences.includeVideosInScan {
+                return
+            }
+
+            let minimumBytes = Int64(AppPreferences.minimumCandidateSizeMB * 1_024 * 1_024)
+            guard let bytes = estimatedSizeBytes(for: asset), bytes > minimumBytes else {
                 return
             }
 

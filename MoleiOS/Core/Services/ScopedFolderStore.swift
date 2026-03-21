@@ -3,6 +3,7 @@ import Foundation
 protocol ScopedFolderStoring {
     func scopedFolders() -> [URL]
     func addFolder(_ url: URL) throws
+    func clearFolders()
 }
 
 final class ScopedFolderStore: ScopedFolderStoring {
@@ -25,6 +26,14 @@ final class ScopedFolderStore: ScopedFolderStoring {
         allBookmarks.append(bookmarkData)
         userDefaults.set(allBookmarks, forKey: bookmarkKey)
         cachedURLs = resolveBookmarks()
+    }
+
+    func clearFolders() {
+        for url in cachedURLs {
+            url.stopAccessingSecurityScopedResource()
+        }
+        userDefaults.removeObject(forKey: bookmarkKey)
+        cachedURLs = []
     }
 
     private func resolveBookmarks() -> [URL] {

@@ -20,7 +20,7 @@ struct PoleApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                DashboardView(viewModel: dashboardViewModel)
+                DashboardView(viewModel: dashboardViewModel, appState: appState)
                     .tabItem {
                         Label("Dashboard", systemImage: "rectangle.grid.1x2.fill")
                     }
@@ -35,7 +35,8 @@ struct PoleApp: App {
                         Label("Settings", systemImage: "gearshape")
                     }
             }
-            .tint(.green)
+            .tint(appState.tintColor)
+            .preferredColorScheme(appState.preferredColorScheme)
         }
     }
 }

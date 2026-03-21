@@ -1,11 +1,18 @@
 import SwiftUI
+import LocalAuthentication
 
 struct DashboardView: View {
     @StateObject private var viewModel: DashboardViewModel
+    @ObservedObject var appState: AppState
     @State private var pendingDeleteCandidate: CleanupCandidate?
+    @State private var pendingStrictCandidate: CleanupCandidate?
+    @State private var showStrictConfirmation = false
+    @State private var showAuthError = false
+    @State private var authErrorMessage = ""
 
-    init(viewModel: DashboardViewModel) {
+    init(viewModel: DashboardViewModel, appState: AppState) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        self.appState = appState
     }
 
     var body: some View {
@@ -116,7 +123,7 @@ struct DashboardView: View {
                         Section {
                             Button("Delete This Item", role: .destructive) {
                                 Task {
-                                    await viewModel.delete(candidate: item)
+                                    await handleDeleteRequest(for: item)
                                 }
                                 pendingDeleteCandidate = nil
                             }
@@ -132,9 +139,27 @@ struct DashboardView: View {
                 }
             }
             .task {
-                if viewModel.insights.isEmpty {
+                if appState.autoScanOnLaunch && viewModel.insights.isEmpty {
                     await viewModel.load()
                 }
+            }
+            .alert("Biometric Check Failed", isPresented: $showAuthError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(authErrorMessage)
+            }
+            .alert("Final Confirmation", isPresented: $showStrictConfirmation, presenting: pendingStrictCandidate) { item in
+                Button("Delete \(item.displayName)", role: .destructive) {
+                    Task {
+                        await viewModel.delete(candidate: item)
+                    }
+                    pendingStrictCandidate = nil
+                }
+                Button("Cancel", role: .cancel) {
+                    pendingStrictCandidate = nil
+                }
+            } message: { _ in
+                Text("Strict mode is enabled. Confirm again to proceed.")
             }
         }
     }
@@ -144,6 +169,46 @@ struct DashboardView: View {
             Text(title)
             Spacer()
             Text(value).bold()
+        }
+    }
+
+    private func handleDeleteRequest(for item: CleanupCandidate) async {
+        if appState.shouldUseBiometricLock {
+            let ok = await authenticateBiometrically()
+            if !ok { return }
+        }
+
+        if appState.strictDeleteConfirmation {
+            pendingStrictCandidate = item
+            showStrictConfirmation = true
+            return
+        }
+
+        await viewModel.delete(candidate: item)
+    }
+
+    private func authenticateBiometrically() async -> Bool {
+        await withCheckedContinuation { continuation in
+            let context = LAContext()
+            var error: NSError?
+            let reason = "Confirm identity before deleting data."
+
+            guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
+                authErrorMessage = "Biometric authentication is unavailable on this device."
+                showAuthError = true
+                continuation.resume(returning: false)
+                return
+            }
+
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, evalError in
+                DispatchQueue.main.async {
+                    if !success {
+                        authErrorMessage = evalError?.localizedDescription ?? "Authentication failed."
+                        showAuthError = true
+                    }
+                    continuation.resume(returning: success)
+                }
+            }
         }
     }
 }

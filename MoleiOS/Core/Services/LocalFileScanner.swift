@@ -63,11 +63,12 @@ struct LocalFileScanner {
         }
 
         var items: [CleanupCandidate] = []
+        let minimumBytes = Int64(AppPreferences.minimumCandidateSizeMB * 1_024 * 1_024)
         for case let url as URL in enumerator {
             guard let values = try? url.resourceValues(forKeys: keys),
                   values.isRegularFile == true,
                   let size = values.fileSize,
-                  size >= 10 * 1_024 * 1_024
+                  Int64(size) >= minimumBytes
             else {
                 continue
             }
