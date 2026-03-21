@@ -14,7 +14,7 @@ struct PoleApp: App {
             TabView {
                 DashboardView(viewModel: dashboardViewModel)
                     .tabItem {
-                        Label("Dashboard", systemImage: "gauge.with.dots.needle")
+                        Label("Dashboard", systemImage: "rectangle.grid.1x2.fill")
                     }
 
                 StorageBreakdownView(viewModel: dashboardViewModel)
