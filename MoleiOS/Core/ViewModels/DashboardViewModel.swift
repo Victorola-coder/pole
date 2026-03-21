@@ -55,10 +55,18 @@ final class DashboardViewModel: ObservableObject {
             scanProgress = 0
             scanStatusText = "Starting scan..."
             errorMessage = nil
+            var didFail = false
             defer {
                 isLoading = false
-                scanProgress = 1
-                scanStatusText = "Completed"
+                if didFail {
+                    scanProgress = 0
+                    scanStatusText = "Scan failed"
+                } else if scanStatusText == "Scan cancelled" {
+                    scanProgress = 0
+                } else {
+                    scanProgress = 1
+                    scanStatusText = "Completed"
+                }
             }
 
             do {
@@ -74,8 +82,8 @@ final class DashboardViewModel: ObservableObject {
             } catch is CancellationError {
                 scanStatusText = "Scan cancelled"
             } catch {
+                didFail = true
                 errorMessage = humanReadableScanError(error)
-                scanStatusText = "Scan failed"
             }
         }
         currentScanTask = task
