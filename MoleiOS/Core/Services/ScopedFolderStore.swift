@@ -20,7 +20,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
     }
 
     func addFolder(_ url: URL) throws {
-        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+        let bookmarkData = try url.bookmarkData()
         var allBookmarks = userDefaults.array(forKey: bookmarkKey) as? [Data] ?? []
         allBookmarks.append(bookmarkData)
         userDefaults.set(allBookmarks, forKey: bookmarkKey)
@@ -35,7 +35,7 @@ final class ScopedFolderStore: ScopedFolderStoring {
             var isStale = false
             guard let url = try? URL(
                 resolvingBookmarkData: bookmark,
-                options: .withSecurityScope,
+                options: [],
                 relativeTo: nil,
                 bookmarkDataIsStale: &isStale
             )

@@ -16,6 +16,7 @@
 		51D106C3CF98EDB0298A20A5 /* PermissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F53C5A25D68303712BDE9 /* PermissionService.swift */; };
 		76FFA07ED65E43C8DCB7D9C2 /* MockStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06914BB3990184C4532AB80B /* MockStorageScanner.swift */; };
 		988134C2EDFA5E50316529F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3716EF9626CB62AAB9366213 /* SettingsView.swift */; };
+		9FFCA39145BCDE6700165572 /* ScopedFolderStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DFE317AEF6607511BAD290 /* ScopedFolderStore.swift */; };
 		A7C4A3601A0ABC1CBF374BC4 /* CompositeStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D38982AC5A5855A82CCEC2 /* CompositeStorageScanner.swift */; };
 		B700DE8285A39F3D5082872C /* CleanupCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E673B59D3C2372AF2A1780 /* CleanupCandidate.swift */; };
 		C4906F20D6A928AC4E00E152 /* PhotoLibraryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */; };
@@ -32,6 +33,7 @@
 		4E70227F2E20C826B5643BC1 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		4E87A905B7C496F78C586CD9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		87E10DA68ADDE538171B4665 /* LocalFileScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileScanner.swift; sourceTree = "<group>"; };
+		93DFE317AEF6607511BAD290 /* ScopedFolderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopedFolderStore.swift; sourceTree = "<group>"; };
 		AA5DCAB56D7647AC872006EC /* CleanupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanupService.swift; sourceTree = "<group>"; };
 		BC5C3DF60BA53FFF3CDC0B37 /* StorageBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageBreakdownView.swift; sourceTree = "<group>"; };
 		CC05156DB8C1D5C7AEAC5565 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				06914BB3990184C4532AB80B /* MockStorageScanner.swift */,
 				F23F53C5A25D68303712BDE9 /* PermissionService.swift */,
 				1BA8C573AD46FC5CF75FEB69 /* PhotoLibraryScanner.swift */,
+				93DFE317AEF6607511BAD290 /* ScopedFolderStore.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				2C0A814FEFFE550357AC68C9 /* MoleiOSApp.swift in Sources */,
 				51D106C3CF98EDB0298A20A5 /* PermissionService.swift in Sources */,
 				C4906F20D6A928AC4E00E152 /* PhotoLibraryScanner.swift in Sources */,
+				9FFCA39145BCDE6700165572 /* ScopedFolderStore.swift in Sources */,
 				988134C2EDFA5E50316529F2 /* SettingsView.swift in Sources */,
 				D34F26ECAE7F34BF4F3E404E /* StorageBreakdownView.swift in Sources */,
 				E8D64963CF94E59F4D2CA0FB /* StorageInsight.swift in Sources */,
