@@ -32,8 +32,10 @@ struct DashboardView: View {
                     ContentUnavailableView("Scan failed", systemImage: "exclamationmark.triangle", description: Text(errorMessage))
                         .overlay(alignment: .bottom) {
                             HStack(spacing: 12) {
-                                Button("Retry") {
-                                    Task { await viewModel.load() }
+                                Button(viewModel.canResumeInterruptedScan ? "Resume" : "Retry") {
+                                    Task {
+                                        await viewModel.load(resumeFromFailure: viewModel.canResumeInterruptedScan)
+                                    }
                                 }
                                 Button("Dismiss") {
                                     viewModel.clearError()

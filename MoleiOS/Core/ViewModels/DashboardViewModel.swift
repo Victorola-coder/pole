@@ -19,6 +19,9 @@ final class DashboardViewModel: ObservableObject {
     private let permissionService: PermissionServicing
     private let scopedFolderStore: ScopedFolderStoring
     private var currentScanTask: Task<Void, Never>?
+    /// Set when a scan fails mid-way so Retry can skip finished steps (see `ScanFailure`).
+    private var pendingResumeSnapshot: ScanResumeSnapshot?
+    @Published private(set) var canResumeInterruptedScan = false
 
     init(
         scanner: StorageScanning,
@@ -52,13 +55,21 @@ final class DashboardViewModel: ObservableObject {
         protectedFolders = scopedFolderStore.protectedFolders()
     }
 
-    func load() async {
+    /// - Parameter resumeFromFailure: When true (after a mid-scan error), continues from the last completed step instead of restarting at 0%.
+    func load(resumeFromFailure: Bool = false) async {
         currentScanTask?.cancel()
+
+        if !resumeFromFailure {
+            pendingResumeSnapshot = nil
+            canResumeInterruptedScan = false
+        }
 
         let task = Task { @MainActor in
             isLoading = true
-            scanProgress = 0
-            scanStatusText = "Starting scan..."
+            if !resumeFromFailure {
+                scanProgress = 0
+            }
+            scanStatusText = resumeFromFailure ? "Resuming scan…" : "Starting scan..."
             errorMessage = nil
             var didFail = false
             defer {
@@ -76,15 +87,21 @@ final class DashboardViewModel: ObservableObject {
 
             do {
                 if let compositeScanner = scanner as? CompositeStorageScanner {
-                    let result = try await compositeScanner.scanAll { value, status in
-                        await MainActor.run {
-                            self.scanProgress = value
-                            self.scanStatusText = status
-                        }
-                    }
+                    let resume = resumeFromFailure ? self.pendingResumeSnapshot : nil
+                    let result = try await compositeScanner.scanAll(
+                        { value, status in
+                            await MainActor.run {
+                                self.scanProgress = value
+                                self.scanStatusText = status
+                            }
+                        },
+                        resume: resume
+                    )
                     insights = result.insights
                     candidates = result.candidates
                     folderAnalysis = result.folderAnalysis
+                    pendingResumeSnapshot = nil
+                    canResumeInterruptedScan = false
                 } else {
                     scanStatusText = "Scanning storage categories (1/3)..."
                     insights = try await scanner.scan()
@@ -99,10 +116,17 @@ final class DashboardViewModel: ObservableObject {
                     scanStatusText = "Building folder analysis (3/3)..."
                     folderAnalysis = try await scanner.scanFolderAnalysis()
                 }
+            } catch let scanFail as ScanFailure {
+                didFail = true
+                pendingResumeSnapshot = scanFail.snapshot
+                canResumeInterruptedScan = true
+                errorMessage = humanReadableScanError(scanFail.underlying)
             } catch is CancellationError {
                 scanStatusText = "Scan cancelled"
             } catch {
                 didFail = true
+                pendingResumeSnapshot = nil
+                canResumeInterruptedScan = false
                 errorMessage = humanReadableScanError(error)
             }
         }
@@ -116,8 +140,23 @@ final class DashboardViewModel: ObservableObject {
     }
 
     private func humanReadableScanError(_ error: Error) -> String {
-        if let localizedError = error as? LocalizedError, let description = localizedError.errorDescription {
+        if let localizedError = error as? LocalizedError, let description = localizedError.errorDescription, !description.isEmpty {
             return description
+        }
+        let ns = error as NSError
+        if ns.domain == NSURLErrorDomain {
+            switch ns.code {
+            case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost:
+                return "Network unavailable. For iCloud Photos, use Wi‑Fi or try again when online."
+            case NSURLErrorTimedOut:
+                return "The request timed out. Try again on a stable connection."
+            default:
+                break
+            }
+        }
+        let text = ns.localizedDescription
+        if !text.isEmpty, text != "(null)" {
+            return text
         }
         return "Scan failed. Please try again."
     }
@@ -128,6 +167,8 @@ final class DashboardViewModel: ObservableObject {
 
     func clearError() {
         errorMessage = nil
+        pendingResumeSnapshot = nil
+        canResumeInterruptedScan = false
     }
 
     func importFolderFailed() {
