@@ -30,12 +30,12 @@ struct StorageBreakdownView: View {
                     Button("Add Folder From Files") {
                         isFolderPickerPresented = true
                     }
-                    if viewModel.scopedFolderNames.isEmpty {
+                    if viewModel.scopedFolders.isEmpty {
                         Text("No external folders granted yet.")
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach(viewModel.scopedFolderNames, id: \.self) { name in
-                            Text(name)
+                        ForEach(viewModel.scopedFolders, id: \.self) { url in
+                            Text(url.lastPathComponent)
                         }
                     }
                 }
@@ -44,16 +44,16 @@ struct StorageBreakdownView: View {
                     Button("Add Protected Folder") {
                         isProtectedFolderPickerPresented = true
                     }
-                    if viewModel.protectedFolderNames.isEmpty {
+                    if viewModel.protectedFolders.isEmpty {
                         Text("No protected folders configured.")
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach(viewModel.protectedFolderNames, id: \.self) { name in
+                        ForEach(viewModel.protectedFolders, id: \.self) { url in
                             HStack {
-                                Text(name)
+                                Text(url.lastPathComponent)
                                 Spacer()
                                 Button("Remove", role: .destructive) {
-                                    viewModel.removeProtectedFolder(named: name)
+                                    viewModel.removeProtectedFolder(at: url)
                                 }
                                 .buttonStyle(.borderless)
                             }

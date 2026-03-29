@@ -9,8 +9,9 @@ final class DashboardViewModel: ObservableObject {
     @Published private(set) var scanStatusText = "Idle"
     @Published private(set) var errorMessage: String?
     @Published private(set) var canScanPhotos = false
-    @Published private(set) var scopedFolderNames: [String] = []
-    @Published private(set) var protectedFolderNames: [String] = []
+    /// Full security-scoped URLs — used as `ForEach` identity (last path alone can duplicate, e.g. two `Documents` folders).
+    @Published private(set) var scopedFolders: [URL] = []
+    @Published private(set) var protectedFolders: [URL] = []
     @Published private(set) var folderAnalysis: [FolderAnalysisNode] = []
 
     private let scanner: StorageScanning
@@ -30,8 +31,8 @@ final class DashboardViewModel: ObservableObject {
         self.permissionService = permissionService
         self.scopedFolderStore = scopedFolderStore
         self.canScanPhotos = permissionService.canScanPhotos
-        self.scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
-        self.protectedFolderNames = scopedFolderStore.protectedFolders().map(\.lastPathComponent)
+        self.scopedFolders = scopedFolderStore.scopedFolders()
+        self.protectedFolders = scopedFolderStore.protectedFolders()
     }
 
     var totalUsed: Double {
@@ -47,8 +48,8 @@ final class DashboardViewModel: ObservableObject {
     }
 
     func syncScopedFolders() {
-        scopedFolderNames = scopedFolderStore.scopedFolders().map(\.lastPathComponent)
-        protectedFolderNames = scopedFolderStore.protectedFolders().map(\.lastPathComponent)
+        scopedFolders = scopedFolderStore.scopedFolders()
+        protectedFolders = scopedFolderStore.protectedFolders()
     }
 
     func load() async {
@@ -171,10 +172,7 @@ final class DashboardViewModel: ObservableObject {
         }
     }
 
-    func removeProtectedFolder(named folderName: String) {
-        guard let url = scopedFolderStore.protectedFolders().first(where: { $0.lastPathComponent == folderName }) else {
-            return
-        }
+    func removeProtectedFolder(at url: URL) {
         scopedFolderStore.removeProtectedFolder(url)
         syncScopedFolders()
     }
