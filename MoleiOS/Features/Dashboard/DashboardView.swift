@@ -2,7 +2,7 @@ import SwiftUI
 import LocalAuthentication
 
 struct DashboardView: View {
-    @StateObject private var viewModel: DashboardViewModel
+    @ObservedObject var viewModel: DashboardViewModel
     @ObservedObject var appState: AppState
     @State private var pendingDeleteCandidate: CleanupCandidate?
     @State private var pendingStrictCandidate: CleanupCandidate?
@@ -10,11 +10,6 @@ struct DashboardView: View {
     @State private var showCancelScanConfirmation = false
     @State private var showAuthError = false
     @State private var authErrorMessage = ""
-
-    init(viewModel: DashboardViewModel, appState: AppState) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-        self.appState = appState
-    }
 
     var body: some View {
         NavigationStack {

@@ -3,6 +3,11 @@ import Photos
 import UIKit
 
 struct PhotoLibraryScanner {
+    /// Avoid measuring every asset on large libraries; insights are approximate GB totals.
+    private static let maxInsightSampleCount = 160
+    /// Hard cap on per-asset size lookups for candidate picking (then take top N by size).
+    private static let maxCandidateAssetsToMeasure = 3_000
+
     func scanInsights() async throws -> [StorageInsight] {
         try await Task.detached(priority: .utility) {
             let imageAssets = PHAsset.fetchAssets(with: .image, options: nil)
@@ -15,8 +20,8 @@ struct PhotoLibraryScanner {
                 videoAssets = PHAsset.fetchAssets(with: options)
             }
 
-            let imageBytes = try await totalBytes(for: imageAssets)
-            let videoBytes = try await totalBytes(for: videoAssets)
+            let imageBytes = try await self.sampledTotalBytes(for: imageAssets)
+            let videoBytes = try await self.sampledTotalBytes(for: videoAssets)
 
             return [
                 StorageInsight(
@@ -36,15 +41,16 @@ struct PhotoLibraryScanner {
     func scanCandidates(limit: Int = 50) async throws -> [CleanupCandidate] {
         try await Task.detached(priority: .utility) {
             let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             let assets = PHAsset.fetchAssets(with: options)
-            let allAssets = allAssets(from: assets)
+            let collected = allAssets(from: assets)
+            let toMeasure = self.assetsSubsetForCandidateScan(collected)
 
             var allCandidates: [CleanupCandidate] = []
             let minimumBytes = Int64(AppPreferences.minimumCandidateSizeMB * 1_024 * 1_024)
 
-            for (index, asset) in allAssets.enumerated() {
-                if index.isMultiple(of: 25) {
+            for (index, asset) in toMeasure.enumerated() {
+                if index.isMultiple(of: 40) {
                     try Task.checkCancellation()
                     await Task.yield()
                 }
@@ -75,10 +81,41 @@ struct PhotoLibraryScanner {
         }.value
     }
 
-    private func totalBytes(for assets: PHFetchResult<PHAsset>) async throws -> Int64 {
-        let collectedAssets = allAssets(from: assets)
+    /// For very large libraries, measure a bounded random subset so candidate discovery stays responsive.
+    private func assetsSubsetForCandidateScan(_ assets: [PHAsset]) -> [PHAsset] {
+        guard assets.count > Self.maxCandidateAssetsToMeasure else {
+            return assets
+        }
+        return Array(assets.shuffled().prefix(Self.maxCandidateAssetsToMeasure))
+    }
+
+    private func sampledTotalBytes(for fetchResult: PHFetchResult<PHAsset>) async throws -> Int64 {
+        let collected = allAssets(from: fetchResult)
+        let count = collected.count
+        guard count > 0 else { return 0 }
+
+        if count <= Self.maxInsightSampleCount {
+            return try await sumBytesSequential(assets: collected)
+        }
+
+        var sample: [PHAsset] = []
+        sample.reserveCapacity(Self.maxInsightSampleCount)
+        var used = Set<Int>()
+        while sample.count < Self.maxInsightSampleCount {
+            let i = Int.random(in: 0..<count)
+            if used.insert(i).inserted {
+                sample.append(collected[i])
+            }
+        }
+
+        let sampleSum = try await sumBytesSequential(assets: sample)
+        let avg = Double(sampleSum) / Double(sample.count)
+        return Int64(avg * Double(count))
+    }
+
+    private func sumBytesSequential(assets: [PHAsset]) async throws -> Int64 {
         var total: Int64 = 0
-        for (index, asset) in collectedAssets.enumerated() {
+        for (index, asset) in assets.enumerated() {
             if index.isMultiple(of: 25) {
                 try Task.checkCancellation()
                 await Task.yield()
@@ -94,15 +131,7 @@ struct PhotoLibraryScanner {
             return cached
         }
 
-        let value: Int64?
-        switch asset.mediaType {
-        case .image:
-            value = try await imageSizeBytes(for: asset)
-        case .video:
-            value = try await videoSizeBytes(for: asset)
-        default:
-            value = nil
-        }
+        let value = try await byteSizeUsingAssetResources(for: asset)
 
         if let value {
             await PhotoAssetSizeCache.shared.set(value, for: asset.localIdentifier)
@@ -110,49 +139,31 @@ struct PhotoLibraryScanner {
         return value
     }
 
-    private func imageSizeBytes(for asset: PHAsset) async throws -> Int64? {
-        try await withCheckedThrowingContinuation { continuation in
-            let options = PHImageRequestOptions()
-            options.isSynchronous = false
-            options.isNetworkAccessAllowed = true
-            options.deliveryMode = .highQualityFormat
+    /// Streams one primary resource’s byte length (avoids double-counting when an asset has several resources).
+    private func byteSizeUsingAssetResources(for asset: PHAsset) async throws -> Int64? {
+        let resources = PHAssetResource.assetResources(for: asset)
+        guard !resources.isEmpty else { return nil }
 
-            var requestID: PHImageRequestID = PHInvalidImageRequestID
-            requestID = PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { data, _, _, info in
-                if let cancelled = info?[PHImageCancelledKey] as? Bool, cancelled {
-                    continuation.resume(throwing: CancellationError())
-                    return
-                }
-                if let error = info?[PHImageErrorKey] as? Error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                continuation.resume(returning: data.map { Int64($0.count) })
-            }
-
-            Task {
-                if Task.isCancelled {
-                    PHImageManager.default().cancelImageRequest(requestID)
-                }
-            }
+        let primary: PHAssetResource?
+        switch asset.mediaType {
+        case .image:
+            primary = resources.first(where: { $0.type == .fullSizePhoto || $0.type == .photo })
+        case .video:
+            primary = resources.first(where: { $0.type == .fullSizeVideo || $0.type == .video })
+        default:
+            primary = nil
         }
+
+        guard let resource = primary ?? resources.first else { return nil }
+        let bytes = try await resourceStreamedByteCount(resource: resource)
+        return bytes > 0 ? bytes : nil
     }
 
-    private func videoSizeBytes(for asset: PHAsset) async throws -> Int64? {
-        let options = PHImageRequestOptions()
-        options.isNetworkAccessAllowed = true
-        _ = options
-
-        let resources = PHAssetResource.assetResources(for: asset)
-        guard let resource = resources.first(where: { $0.type == .video || $0.type == .fullSizeVideo }) else {
-            return nil
-        }
-
-        return try await withCheckedThrowingContinuation { continuation in
+    private func resourceStreamedByteCount(resource: PHAssetResource) async throws -> Int64 {
+        try await withCheckedThrowingContinuation { continuation in
             var totalBytes: Int64 = 0
             let requestOptions = PHAssetResourceRequestOptions()
             requestOptions.isNetworkAccessAllowed = true
-            let timeoutSeconds: DispatchTimeInterval = .seconds(20)
 
             let requestID = PHAssetResourceManager.default().requestData(
                 for: resource,
@@ -164,14 +175,10 @@ struct PhotoLibraryScanner {
                     if let error {
                         continuation.resume(throwing: error)
                     } else {
-                        continuation.resume(returning: totalBytes > 0 ? totalBytes : nil)
+                        continuation.resume(returning: totalBytes)
                     }
                 }
             )
-
-            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeoutSeconds) {
-                PHAssetResourceManager.default().cancelDataRequest(requestID)
-            }
 
             Task {
                 if Task.isCancelled {

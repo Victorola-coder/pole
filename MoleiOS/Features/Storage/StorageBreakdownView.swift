@@ -78,6 +78,9 @@ struct StorageBreakdownView: View {
                 }
             }
             .navigationTitle("Storage")
+            .refreshable {
+                await viewModel.load()
+            }
             .fileImporter(
                 isPresented: $isFolderPickerPresented,
                 allowedContentTypes: [.folder]
@@ -106,9 +109,6 @@ struct StorageBreakdownView: View {
             }
             .task {
                 viewModel.syncScopedFolders()
-                if viewModel.insights.isEmpty {
-                    await viewModel.load()
-                }
             }
         }
     }

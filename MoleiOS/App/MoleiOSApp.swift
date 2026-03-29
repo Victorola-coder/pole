@@ -56,8 +56,8 @@ struct PoleApp: App {
                 OnboardingView(appState: appState) {}
             }
             .task {
-                try? await Task.sleep(nanoseconds: 850_000_000)
-                withAnimation(.easeOut(duration: 0.35)) {
+                try? await Task.sleep(nanoseconds: 350_000_000)
+                withAnimation(.easeOut(duration: 0.22)) {
                     showLaunchOverlay = false
                 }
             }
@@ -99,5 +99,7 @@ private struct LaunchIconOverlay: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.ultraThinMaterial)
         .ignoresSafeArea()
+        // Splash is visual only so tabs stay tappable if the user acts before it dismisses.
+        .allowsHitTesting(false)
     }
 }
