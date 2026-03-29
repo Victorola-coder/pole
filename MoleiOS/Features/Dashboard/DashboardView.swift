@@ -157,10 +157,8 @@ struct DashboardView: View {
                     .navigationBarTitleDisplayMode(.inline)
                 }
             }
-            .task {
-                if appState.autoScanOnLaunch && viewModel.insights.isEmpty {
-                    await viewModel.load()
-                }
+            .refreshable {
+                await viewModel.load()
             }
             .alert("Biometric Check Failed", isPresented: $showAuthError) {
                 Button("OK", role: .cancel) {}

@@ -5,6 +5,8 @@ struct PoleApp: App {
     @StateObject private var appState: AppState
     @StateObject private var dashboardViewModel: DashboardViewModel
     @State private var showLaunchOverlay = true
+    /// Auto-scan runs from root so switching tabs does not cancel SwiftUI `.task` (Dashboard used to restart/disrupt scans).
+    @State private var didRunAutoScanThisSession = false
     private let auditLogger: LocalDeletionAuditLogger
 
     init() {
@@ -42,6 +44,14 @@ struct PoleApp: App {
                         .tabItem {
                             Label("Settings", systemImage: "gearshape")
                         }
+                }
+                .task(id: appState.isOnboardingComplete) {
+                    guard appState.isOnboardingComplete else { return }
+                    guard appState.autoScanOnLaunch else { return }
+                    guard !didRunAutoScanThisSession else { return }
+                    guard dashboardViewModel.insights.isEmpty else { return }
+                    didRunAutoScanThisSession = true
+                    await dashboardViewModel.load()
                 }
 
                 if showLaunchOverlay {
