@@ -19,12 +19,12 @@ struct LocalFileScanner {
     }
 
     func scanInsights() async throws -> [StorageInsight] {
-        let bytes = try await Task.detached(priority: .utility) {
-            try directories.reduce(Int64(0)) { partialResult, directory in
-                try Task.checkCancellation()
-                return partialResult + (try recursiveDirectoryBytes(at: directory))
-            }
-        }.value
+        // Do not use Task.detached here — it does not inherit cancellation from the scan task, so “Cancel Scan” would not stop work.
+        var bytes: Int64 = 0
+        for directory in directories {
+            try Task.checkCancellation()
+            bytes += try recursiveDirectoryBytes(at: directory)
+        }
 
         return [
             StorageInsight(
@@ -36,33 +36,28 @@ struct LocalFileScanner {
     }
 
     func scanCandidates(limit: Int = 50) async throws -> [CleanupCandidate] {
-        let candidates: [CleanupCandidate] = try await Task.detached(priority: .utility) {
-            var collected: [CleanupCandidate] = []
-            for directory in directories {
-                try Task.checkCancellation()
-                collected.append(contentsOf: try fileCandidates(in: directory))
-            }
-            return collected
-        }.value
+        var collected: [CleanupCandidate] = []
+        for directory in directories {
+            try Task.checkCancellation()
+            collected.append(contentsOf: try fileCandidates(in: directory))
+        }
 
-        return candidates
+        return collected
             .sorted { $0.sizeBytes > $1.sizeBytes }
             .prefix(limit)
             .map { $0 }
     }
 
     func scanFolderAnalysis(maxDepth: Int = 2, maxChildrenPerNode: Int = 8) async throws -> [FolderAnalysisNode] {
-        try await Task.detached(priority: .utility) {
-            try directories.map { root in
-                try Task.checkCancellation()
-                return try buildFolderNode(
-                    at: root,
-                    currentDepth: 0,
-                    maxDepth: maxDepth,
-                    maxChildrenPerNode: maxChildrenPerNode
-                )
-            }
-        }.value
+        try directories.map { root in
+            try Task.checkCancellation()
+            return try buildFolderNode(
+                at: root,
+                currentDepth: 0,
+                maxDepth: maxDepth,
+                maxChildrenPerNode: maxChildrenPerNode
+            )
+        }
     }
 
     private func recursiveDirectoryBytes(at root: URL) throws -> Int64 {

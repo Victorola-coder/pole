@@ -1,6 +1,5 @@
 import Foundation
 import Photos
-import UIKit
 
 struct PhotoLibraryScanner {
     /// Avoid measuring every asset on large libraries; insights are approximate GB totals.
@@ -8,80 +7,92 @@ struct PhotoLibraryScanner {
     /// Hard cap on per-asset size lookups for candidate picking (then take top N by size).
     private static let maxCandidateAssetsToMeasure = 3_000
 
-    func scanInsights() async throws -> [StorageInsight] {
-        try await Task.detached(priority: .utility) {
-            let imageAssets = PHAsset.fetchAssets(with: .image, options: nil)
-            let videoAssets: PHFetchResult<PHAsset>
-            if AppPreferences.includeVideosInScan {
-                videoAssets = PHAsset.fetchAssets(with: .video, options: nil)
-            } else {
-                let options = PHFetchOptions()
-                options.predicate = NSPredicate(value: false)
-                videoAssets = PHAsset.fetchAssets(with: options)
-            }
+    /// `progress` receives `(0...1, status)` for the photo-insights sub-phase only (caller maps to global bar).
+    func scanInsights(
+        progress: (@Sendable (Double, String) async -> Void)? = nil
+    ) async throws -> [StorageInsight] {
+        await progress?(0, "Preparing photo library totals…")
 
-            let imageBytes = try await self.sampledTotalBytes(for: imageAssets)
-            let videoBytes = try await self.sampledTotalBytes(for: videoAssets)
+        let imageAssets = PHAsset.fetchAssets(with: .image, options: nil)
 
-            return [
-                StorageInsight(
-                    category: "Photos",
-                    usedGigabytes: bytesToGigabytes(imageBytes),
-                    suggestedSavingsGigabytes: bytesToGigabytes(Int64(Double(imageBytes) * 0.15))
-                ),
-                StorageInsight(
-                    category: "Videos",
-                    usedGigabytes: bytesToGigabytes(videoBytes),
-                    suggestedSavingsGigabytes: bytesToGigabytes(Int64(Double(videoBytes) * 0.2))
-                )
-            ]
-        }.value
+        await progress?(0.15, "Measuring photos…")
+        let imageBytes = try await sampledTotalBytes(for: imageAssets, progress: progress, progressRange: 0.15 ... 0.55)
+
+        let videoBytes: Int64
+        if AppPreferences.includeVideosInScan {
+            await progress?(0.58, "Measuring videos…")
+            let videoAssets = PHAsset.fetchAssets(with: .video, options: nil)
+            videoBytes = try await sampledTotalBytes(for: videoAssets, progress: progress, progressRange: 0.58 ... 0.98)
+        } else {
+            videoBytes = 0
+        }
+
+        await progress?(1, "Photo insights ready")
+
+        return [
+            StorageInsight(
+                category: "Photos",
+                usedGigabytes: bytesToGigabytes(imageBytes),
+                suggestedSavingsGigabytes: bytesToGigabytes(Int64(Double(imageBytes) * 0.15))
+            ),
+            StorageInsight(
+                category: "Videos",
+                usedGigabytes: bytesToGigabytes(videoBytes),
+                suggestedSavingsGigabytes: bytesToGigabytes(Int64(Double(videoBytes) * 0.2))
+            )
+        ]
     }
 
-    func scanCandidates(limit: Int = 50) async throws -> [CleanupCandidate] {
-        try await Task.detached(priority: .utility) {
-            let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            let assets = PHAsset.fetchAssets(with: options)
-            let collected = allAssets(from: assets)
-            let toMeasure = self.assetsSubsetForCandidateScan(collected)
+    /// `progress` receives `(0...1, status)` for the photo-candidates sub-phase only.
+    func scanCandidates(
+        limit: Int = 50,
+        progress: (@Sendable (Double, String) async -> Void)? = nil
+    ) async throws -> [CleanupCandidate] {
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let assets = PHAsset.fetchAssets(with: options)
+        let collected = allAssets(from: assets)
+        let toMeasure = assetsSubsetForCandidateScan(collected)
+        let total = max(toMeasure.count, 1)
 
-            var allCandidates: [CleanupCandidate] = []
-            let minimumBytes = Int64(AppPreferences.minimumCandidateSizeMB * 1_024 * 1_024)
+        var allCandidates: [CleanupCandidate] = []
+        let minimumBytes = Int64(AppPreferences.minimumCandidateSizeMB * 1_024 * 1_024)
 
-            for (index, asset) in toMeasure.enumerated() {
-                if index.isMultiple(of: 40) {
-                    try Task.checkCancellation()
-                    await Task.yield()
-                }
-                if asset.mediaType == .video && !AppPreferences.includeVideosInScan {
-                    continue
-                }
-                guard let bytes = try await estimatedSizeBytes(for: asset), bytes >= minimumBytes else {
-                    continue
-                }
-
-                allCandidates.append(
-                    CleanupCandidate(
-                        source: .photos,
-                        displayName: asset.mediaType == .video ? "Video asset" : "Photo asset",
-                        sizeBytes: bytes,
-                        createdAt: asset.creationDate,
-                        detailText: asset.mediaType == .video ? "Video from photo library" : "Photo from photo library",
-                        photoAssetLocalIdentifier: asset.localIdentifier,
-                        fileURL: nil
-                    )
-                )
+        for (index, asset) in toMeasure.enumerated() {
+            if index.isMultiple(of: 20) {
+                try Task.checkCancellation()
+                let fraction = Double(index) / Double(total)
+                await progress?(fraction, "Sizing photos \(index + 1) / \(toMeasure.count)…")
+            }
+            if index.isMultiple(of: 40) {
+                await Task.yield()
+            }
+            if asset.mediaType == .video && !AppPreferences.includeVideosInScan {
+                continue
+            }
+            guard let bytes = try await estimatedSizeBytes(for: asset), bytes >= minimumBytes else {
+                continue
             }
 
-            return allCandidates
-                .sorted { $0.sizeBytes > $1.sizeBytes }
-                .prefix(limit)
-                .map { $0 }
-        }.value
+            allCandidates.append(
+                CleanupCandidate(
+                    source: .photos,
+                    displayName: asset.mediaType == .video ? "Video asset" : "Photo asset",
+                    sizeBytes: bytes,
+                    createdAt: asset.creationDate,
+                    detailText: asset.mediaType == .video ? "Video from photo library" : "Photo from photo library",
+                    photoAssetLocalIdentifier: asset.localIdentifier,
+                    fileURL: nil
+                )
+            )
+        }
+
+        return allCandidates
+            .sorted { $0.sizeBytes > $1.sizeBytes }
+            .prefix(limit)
+            .map { $0 }
     }
 
-    /// For very large libraries, measure a bounded random subset so candidate discovery stays responsive.
     private func assetsSubsetForCandidateScan(_ assets: [PHAsset]) -> [PHAsset] {
         guard assets.count > Self.maxCandidateAssetsToMeasure else {
             return assets
@@ -89,13 +100,21 @@ struct PhotoLibraryScanner {
         return Array(assets.shuffled().prefix(Self.maxCandidateAssetsToMeasure))
     }
 
-    private func sampledTotalBytes(for fetchResult: PHFetchResult<PHAsset>) async throws -> Int64 {
+    private func sampledTotalBytes(
+        for fetchResult: PHFetchResult<PHAsset>,
+        progress: (@Sendable (Double, String) async -> Void)?,
+        progressRange: ClosedRange<Double>
+    ) async throws -> Int64 {
         let collected = allAssets(from: fetchResult)
         let count = collected.count
         guard count > 0 else { return 0 }
 
         if count <= Self.maxInsightSampleCount {
-            return try await sumBytesSequential(assets: collected)
+            return try await sumBytesSequential(
+                assets: collected,
+                progress: progress,
+                progressRange: progressRange
+            )
         }
 
         var sample: [PHAsset] = []
@@ -108,16 +127,30 @@ struct PhotoLibraryScanner {
             }
         }
 
-        let sampleSum = try await sumBytesSequential(assets: sample)
+        let sampleSum = try await sumBytesSequential(
+            assets: sample,
+            progress: progress,
+            progressRange: progressRange
+        )
         let avg = Double(sampleSum) / Double(sample.count)
         return Int64(avg * Double(count))
     }
 
-    private func sumBytesSequential(assets: [PHAsset]) async throws -> Int64 {
+    private func sumBytesSequential(
+        assets: [PHAsset],
+        progress: (@Sendable (Double, String) async -> Void)?,
+        progressRange: ClosedRange<Double>
+    ) async throws -> Int64 {
         var total: Int64 = 0
+        let n = assets.count
         for (index, asset) in assets.enumerated() {
-            if index.isMultiple(of: 25) {
+            if index.isMultiple(of: 12) {
                 try Task.checkCancellation()
+                let t = Double(index) / Double(max(n, 1))
+                let mapped = progressRange.lowerBound + t * (progressRange.upperBound - progressRange.lowerBound)
+                await progress?(mapped, "Measuring library items…")
+            }
+            if index.isMultiple(of: 25) {
                 await Task.yield()
             }
             total += (try await estimatedSizeBytes(for: asset)) ?? 0
@@ -139,7 +172,6 @@ struct PhotoLibraryScanner {
         return value
     }
 
-    /// Streams one primary resource’s byte length (avoids double-counting when an asset has several resources).
     private func byteSizeUsingAssetResources(for asset: PHAsset) async throws -> Int64? {
         let resources = PHAssetResource.assetResources(for: asset)
         guard !resources.isEmpty else { return nil }
@@ -160,31 +192,38 @@ struct PhotoLibraryScanner {
     }
 
     private func resourceStreamedByteCount(resource: PHAssetResource) async throws -> Int64 {
-        try await withCheckedThrowingContinuation { continuation in
-            var totalBytes: Int64 = 0
-            let requestOptions = PHAssetResourceRequestOptions()
-            requestOptions.isNetworkAccessAllowed = true
+        final class RequestState: @unchecked Sendable {
+            /// `PHAssetResourceManager.requestData` request handle (SDK uses an integer ID).
+            var requestID: Int32 = 0
+            var finished = false
+        }
+        let state = RequestState()
 
-            let requestID = PHAssetResourceManager.default().requestData(
-                for: resource,
-                options: requestOptions,
-                dataReceivedHandler: { data in
-                    totalBytes += Int64(data.count)
-                },
-                completionHandler: { error in
-                    if let error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(returning: totalBytes)
+        return try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Int64, Error>) in
+                var totalBytes: Int64 = 0
+                let requestOptions = PHAssetResourceRequestOptions()
+                requestOptions.isNetworkAccessAllowed = true
+
+                state.requestID = PHAssetResourceManager.default().requestData(
+                    for: resource,
+                    options: requestOptions,
+                    dataReceivedHandler: { data in
+                        totalBytes += Int64(data.count)
+                    },
+                    completionHandler: { error in
+                        if state.finished { return }
+                        state.finished = true
+                        if let error {
+                            continuation.resume(throwing: error)
+                        } else {
+                            continuation.resume(returning: totalBytes)
+                        }
                     }
-                }
-            )
-
-            Task {
-                if Task.isCancelled {
-                    PHAssetResourceManager.default().cancelDataRequest(requestID)
-                }
+                )
             }
+        } onCancel: {
+            PHAssetResourceManager.default().cancelDataRequest(state.requestID)
         }
     }
 

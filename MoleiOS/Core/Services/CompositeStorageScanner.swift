@@ -28,7 +28,9 @@ struct CompositeStorageScanner: StorageScanning {
         if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized
             || PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
             await progress(0.08, "Scanning photo/video usage (1/6)...")
-            insights.append(contentsOf: try await photoScanner.scanInsights())
+            insights.append(contentsOf: try await photoScanner.scanInsights { fraction, status in
+                await progress(0.08 + fraction * 0.16, status)
+            })
         }
 
         await progress(0.25, "Scanning app/local files usage (2/6)...")
@@ -42,7 +44,9 @@ struct CompositeStorageScanner: StorageScanning {
         if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized
             || PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
             await progress(0.68, "Collecting photo/video cleanup candidates (4/6)...")
-            candidates.append(contentsOf: try await photoScanner.scanCandidates())
+            candidates.append(contentsOf: try await photoScanner.scanCandidates(limit: 50) { fraction, status in
+                await progress(0.68 + fraction * 0.14, status)
+            })
         }
         candidates.sort { $0.sizeBytes > $1.sizeBytes }
 
